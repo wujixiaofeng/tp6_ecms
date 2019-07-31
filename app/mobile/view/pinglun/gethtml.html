@@ -1,0 +1,61 @@
+<?php
+if($user){
+	$userid=$user[userid];
+}else{
+	$userid=0;
+}
+if($ztid){
+$classid=$ztid;
+}
+?>
+<div class="pinglun2 box1 clearfix">
+	<div class="title">网友评论</div>
+	<ul class="pllist" id="pinglunul<?php echo $guandian?"_".$guandian:""?>"></ul>
+	<form name="saypl<?php echo $guandian?"_".$guandian:""?>" method="post" action="javascript:void(0);" onsubmit="return checkpinglun(this)" class="clearfix" target="addplifr">
+		<a name="tosaypl"></a>
+		<div class="textarea"><textarea name="saytext" placeholder="请输入评论内容"></textarea></div>
+		<input name="id" type="hidden" value="<?php echo $id?>">
+		<input name="classid" type="hidden" value="<?php echo $classid?>">
+		<input name="pltype" type="hidden" value="<?php echo $pltype?>">
+		<input name="enews" type="hidden" value="AddPl">
+		<input name="repid" type="hidden" id="repid" value="0">
+		<input name="nomember" type="hidden" value="1">
+		<input name="in_ifr" type="hidden" value="1">
+		<?php if($guandian){?><input name="guandian" type="hidden" value="<?php echo $guandian?>"><?php }?>
+		<?php if($ztid){?><input name="doaction" type="hidden" value="dozt"><?php }?>
+		<?php if($userid>0){?>
+		<div class="formbottom">
+			<input class="fr" type="submit" value="提交" />
+			<label class="fr clearfix"><input type="checkbox" name="niming" value="1" <?php echo ((int)cookie('pl_niming'))==1?" checked":""?> />匿名</label>
+		</div>
+		<?php }else{?>
+		<div class="useract">
+			<div class="act">
+				您需要登录后才能评论<br>
+				<a href="javascript:passport('login');">登录</a>
+			</div>
+		</div>
+		<?php }?>
+	</form>
+</div>
+<?php if($ztid||$id){?><script><?php if($ztid){?>ztpinglun(<?php echo $ztid?>,1,'<?php echo $guandian?>');<?php }else{?>pinglun(<?php echo $classid?>,<?php echo $id?>,1);<?php }?></script><?php }?>
+<iframe class="size0" name="addplifr"></iframe>
+<div id="replformdiv" class="clearfix">
+	<form name="repl_--repid--" method="post" action="javascript:void(0);" onsubmit="return checkpinglun(this)" class="clearfix" target="addplifr">
+		<div class="textarea"><textarea name="saytext" placeholder="请输入回复内容">--atuser--</textarea></div>
+		<input name="atplid" type="hidden" value="--atplid--">
+		<input name="id" type="hidden" value="<?php echo $id?>">
+		<input name="classid" type="hidden" value="<?php echo $classid?>">
+		<input name="enews" type="hidden" value="AddPl">
+		<input name="repid" type="hidden" id="repid" value="--repid--">
+		<input name="atuserid" type="hidden" id="atuserid" value="--atuserid--">
+		<input name="nomember" type="hidden" value="1">
+		<input name="in_ifr" type="hidden" value="1">
+		<?php if($guandian){?><input name="guandian" type="hidden" value="--guandian--"><?php }?>
+		<?php if($ztid){?><input name="doaction" type="hidden" value="dozt"><?php }?>
+		<div class="formbottom">
+			<input class="fr" type="submit" value="提交" />
+			<label class="fr clearfix"><input type="checkbox" name="niming" value="1" <?php echo ((int)cookie('pl_niming'))==1?" checked":""?> />匿名</label>
+		</div>
+	</form>
+</div>

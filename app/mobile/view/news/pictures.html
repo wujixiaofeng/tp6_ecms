@@ -1,0 +1,42 @@
+{extend name="base/base"}
+{block name="body"}
+<div class="global">
+<div class="p05em">
+<div class="wbg">
+<div class="urhere">
+	<a href="/" class="home fa fa-home"></a>
+	<a href="/" class="home2">Ê×Ò³</a>
+	>
+	<a href="/<?php echo $class_r[$classid]['classpath']?>/" class="classname"><?php echo $class_r[$classid]['classname']?></a>
+</div>
+<h1><?php echo $info['title']?></h1>
+<div class="newsinfo">
+	<span><?php echo $info['username']?></span> 
+	<span><?php echo $info['newstime']?></span>
+</div>
+<div class="clearfix">
+	<a href="javascript:fullscreen(1);" class="fullscreen"><img src="/images/fullscreen.png" /></a>
+</div>
+
+
+<?php
+$picpath.='<div class="slide3 clearfix" id="slide"><ul class="clearfix">';
+foreach($info['list'] as $k=>$v){
+	$picpath.="<li title=\"".$v[desc]."\"><img data-src=\"".$v[img]."\" alt=\"".$v[desc]."\" /></li>";
+} 
+$picpath.='</ul></div>';
+echo $picpath;
+?>
+<script>$('#slide').slide();</script>
+<div id="pl"></div>
+<script>pl("<?php echo $classid?>","<?php echo $id?>");</script>
+</div>
+</div>
+</div>
+{/block}
+{block name="files"}
+<script src="/files/jquery.slide2.js"></script>
+<link rel="stylesheet" type="text/css" href="/files/pinglun.css" />
+<script src="/files/imgplayer.js"></script>
+<link rel="stylesheet" type="text/css" href="/files/imgplayer.css" />
+{/block}

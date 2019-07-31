@@ -1,0 +1,9 @@
+<?php
+foreach($list as $k=>$v){
+$v['titleurl']=str_replace(array("http://www.domain.com","http://cnpai.com"),"",$v['titleurl']);
+$v[newstime]=date("Y-m-d",$v['newstime']);?>
+<li class="clearfix">
+	<a href="<?php echo $v['titleurl']?>" class="tit"><?php echo $v['ftitle']?$v['ftitle']:$v['title']?></a>
+	<span class="time"><?php echo $v['newstime']?></span>
+</li>
+<?php }?>

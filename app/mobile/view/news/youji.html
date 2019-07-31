@@ -1,0 +1,46 @@
+{extend name="base/base"}
+{block name="body"}
+<div class="global">
+<div class="p05em">
+<div class="wbg">
+<div class="urhere">
+	<a href="/" class="home fa fa-home"></a>
+	<a href="/" class="home2">首页</a>
+	>
+	<a href="/<?php echo $class_r[$classid]['classpath']?>/" class="classname"><?php echo $class_r[$classid]['classname']?></a>
+</div>
+<h1><?php echo $info['title']?></h1>
+<div class="newsinfo">
+	<span><?php echo $info['username']?></span> 
+	<span><?php echo $info['newstime']?></span>
+</div>
+<div class="clearfix">
+	<a href="javascript:fullscreen(1);" class="fullscreen"><img src="/images/fullscreen.png" /></a>
+	<a href="http://www.domain.com/index.php?m=albums&yjid=<?php echo $id?>" target="_blank" class="albumslink fr">查看动态相册</a>
+</div>
+
+
+<?php
+$picpath.='<div class="clearfix" id="youji"><ul class="clearfix">';
+foreach($info['list'] as $k=>$v){
+	$day=$v['day'];
+	$place=$v['place'];
+	$picpath.="<li><img data-src=\"$v[img]\" /><div class=\"titlecont\">第".$day."天 ".($place?"$place ":"")."".($v[desc]?"$v[desc]":"")."</div></li>";
+}
+$picpath.='</ul></div>';
+echo $picpath;
+?>
+<script>$('#youji img').lazyload({data_attribute:'src'});</script>
+<div id="pl"></div>
+<script>pl("<?php echo $classid?>","<?php echo $id?>");</script>
+
+</div>
+</div>
+</div>
+{/block}
+{block name="files"}
+<link rel="stylesheet" type="text/css" href="/files/pinglun.css" />
+<script src="/files/imgplayer.js"></script>
+<script src="/files/jquery.lazyload.js"></script>
+<link rel="stylesheet" type="text/css" href="/files/imgplayer.css?v=1" />
+{/block}

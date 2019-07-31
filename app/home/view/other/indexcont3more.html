@@ -1,0 +1,10 @@
+<?php foreach($list as $k=>$v){?>
+	<li>
+		<a href="<?php echo $v[titleurl]?>" class="img" target="_blank"><img src="<?php echo $v[titlepic]?>" alt="<?php echo $v[title]?>" /></a>
+		<a href="/<?php echo $class_r[$v[classid]][classpath]?>/" target="_blank" class="class"><?php echo $class_r[$v[classid]][classname]?></a>
+		<div class="newsinfo">
+			<a href="<?php echo $v[titleurl]?>" class="title" target="_blank" title="<?php echo $v[title]?>"><?php echo $v[title]?></a>
+			<div class="smalltext"><?php echo subtext($v[smalltext],70);?></div>
+		</div>
+	</li>
+<?php }?>

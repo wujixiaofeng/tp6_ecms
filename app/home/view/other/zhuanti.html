@@ -1,0 +1,32 @@
+{extend name="base/base"}
+{block name="body"}
+{include file="public/header4"}
+<div class="zhuantilisttop" style="background:url(/d/topimg/<?=$page%20?>.jpg) center no-repeat;">
+	<div class="wp">
+		<div class="topclass"><h1>全部专题</h1></div>
+	</div>
+</div>
+<div class="zhuantilist">
+	<div class="wp">
+		<ul class="clearfix">
+			<?php
+			foreach($list as $k=>$v){
+				?>
+					<li>
+						<a class="img" href="/<?php echo $v[ztpath]?>" target="_blank"><img src="<?php echo $v[ztimg]?>" /></a>
+						<a href="/<?php echo $v[ztpath]?>" class="title" target="_blank"><?php echo $v[ztname]?></a>
+						<div class="smalltext">时间：<?php echo date("Y-m-d H:i:s",$v[addtime])?><br>概述：<?php $text=subtext($v[intro],70);echo ($text!='暂无简介...'?$text:"暂无概述!");?></div>
+					</li>
+				<?php
+			}
+			?>
+		</ul>
+		<?php echo $pagehtml?>
+	</div>
+</div>
+{/block}
+{block name="files"}
+<link href="/skin/pai3/css/zhuanti.css" rel="stylesheet" type="text/css" />
+{/block}
+{block name="script"}
+{/block}

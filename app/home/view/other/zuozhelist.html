@@ -1,0 +1,69 @@
+{extend name="base/base3"}
+{block name="body"}
+{include file="public/header1"}
+<div class="newstop" style="background:url(/d/topimg/<?php echo ($page+$uid+$ismember)%20?>.jpg) center no-repeat;">
+	<div class="wp zuozheinfo">
+		<div class="img fl"><img src="<?php echo $useravatar?>" /></div>
+		<div class="info fl">
+			<div class="username"><?php echo $userinfo[username]?></div>
+			<div class="usergroup">网站编辑</div>
+			<div class="count">文章：<span><?php echo $rscount?></span></div>
+		</div>
+	</div>
+</div>
+
+<div class="wp newslist clearfix">
+	<div class="mainleft posr">
+		<div class="whiteleft posa"></div>
+		<div class="ulisttit clearfix">
+			<div class="tit1 fl"><h3><?php echo $userinfo[username]?>的文章</h3></div>
+		</div>
+		<ul class="clearfix">
+			<?php
+			foreach($list as $k=>$v){
+				?>
+					<li class="li clearfix">
+						<a class="fl img" href="<?php echo $v[titleurl]?>" target="_blank"><img src="<?php echo $v[titlepic]?>" alt="<?php echo $v[title]?>" /></a>
+						<div class="fr">
+							<a href="<?php echo $v[titleurl]?>" class="title" target="_blank"><?php echo $v[title]?></a>
+							<div class="smalltext"><?php echo subtext($v[smalltext],150);;?></div>
+							<div class="rightbottom clearfix">
+								<a href="<?php echo $v[titleurl]?>" target="_blank">查看全文>></a>
+								<div class="share"></div>
+							</div>
+						</div>
+					</li>
+				<?php
+			}
+			?>
+		</ul>
+		<?php echo $pagehtml;?>
+	</div>
+	<div class="mainright">
+		<div class="newslist6">
+			<div class="listtitle"><h3>文章排行</h3></div>
+				<ul>
+<?php
+$i=0;
+foreach($paihang as $k=>$v){
+	$i++;
+	?>
+	<li class="clearfix">
+		<div class="lileft"><div class="num<?php echo $i?>"><?php echo $i?></div></div>
+		<div class="liright"><a href="<?php echo $v[titleurl]?>" title="<?php echo $v[title]?>"><?php echo $v[title]?></a></div>
+	</li>
+	<?php
+}
+?>
+			</ul>
+		</div>
+	</div>
+</div>
+{include file="public/footer"}
+{/block}
+{block name="files"}
+<link href="/skin/dir2/css/zuozhe.css" rel="stylesheet" type="text/css" />
+<link href="/skin/pai3/css/newslist.css" rel="stylesheet" type="text/css" />
+{/block}
+{block name="script"}
+{/block}

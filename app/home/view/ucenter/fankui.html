@@ -1,0 +1,167 @@
+{extend name="base/base1"}
+{block name="body"}
+<div class="wp mt20 mb20 clearfix">
+	<div class="userleft">{include file="ucenter/menu"}</div>
+	<div class="userright">
+		<div class="fankui">
+<script>
+$(document).ready(function(){
+	$('#form1').submit(function(){
+		var self=$(this);
+		if(!self.find('input[name="title"]').val()){
+			errmsg('请填写标题！');
+			return false;
+		}
+		if(!self.find('textarea[name="saytext"]').val()){
+			errmsg('请填写问题和意见！');
+			return false;
+		}
+		var formData = new FormData($('#form1')[0]);
+		$.ajax({
+			url:'<?php echo safe_action();?>',
+			type:'post',
+			async:false,
+			cache:false,
+			contentType:false,
+			processData:false,
+			dataType:'json',
+			data:formData,
+			success:function(res){
+				if(res.ok){
+					okmsg(res.msg,function(){location.reload();});
+				}else{
+					errmsg(res.msg);
+				}
+			}
+		});
+		return false;
+	});
+});
+</script>
+<div class="feedback">
+<form id="form1" method='post' enctype='multipart/form-data' action="javascript:void(0);">
+<table width="100%" border="0" align="center" cellpadding="10" cellspacing="1" class="table2">
+	<tr><td colspan="2">您的每一次建议都是对我们每一次付出的认可，期待与您共同成长和学习。</td></tr>
+	<tr><td>标题：</td><td><input name='title' type='text' size='20'>（*必填）</td></tr>
+	<tr><td>问题和意见：</td><td><textarea name='saytext' cols='60' rows='12'></textarea>（*必填）</td></tr>
+	<tr><td>QQ号：</td><td><input name='qq' type='text' size='20'>（选填）</td></tr>
+	<tr><td>联系电话：</td><td><input name='mycall' type='text' size='20'>（选填）</td></tr>
+	<tr><td>附件：</td><td><div class="fileinputbg"><input type='file' name='fujian'></div>（选填）</td></tr>
+	<tr><td>&nbsp;</td><td><input type='submit' name='submit' class="layui-btn" value='提交'></td></tr>
+</table>
+</form>
+</div>
+<script>
+$('input[type="file"]').change(function(e) {
+	$(this).parent().addClass('fileinputbg2');
+});
+</script>
+		</div>
+
+
+
+
+
+
+
+
+
+
+
+<style>
+.userright .msg .title3{height:40px; line-height:40px; padding-left:20px;}
+.userright .msg li .msgtext{margin-left:30px; padding-left:0;}
+.userright .msg li input{float:left; margin-top:5px; margin-right:5px;}
+.userright .msg .title3 label{display:block; float:left; margin-left:-12px;}
+</style>
+<script>
+function CheckAll(form,chkall){
+	for(var i=0;i<form.elements.length;i++) {
+		var e=form.elements[i];
+		if(e.name!=chkall.name)e.checked=chkall.checked;
+	}
+}
+</script>
+<form name="msgform" method="post">
+	<div class="msg">
+		<div class="title3">反馈记录</div>
+		<ul>
+<?php
+if($list){
+foreach($list as $k=>$v){
+?>
+	<li idvalue="<?php echo $v[id]?>">
+		<div class="clearfix">
+			<input type="checkbox" name="id[]" value="<?php echo $v['id']?>" />
+			<div class="msgicon<?php echo $v[haveread]?"":" haveread"?>" title="管理员<?php echo $v[haveread]?"已读":"未读"?>"></div>
+			<div class="msgtitle"><span class="color2"><?php echo replaceand($v[title])?></span><span class="smalltext"><?php echo preg_replace("/\<.*?\>/is"," ",$v[saytext])?></span></div>
+			<div class="msgtime"><?php echo substr($v[saytime],0,10);?></div>
+		</div>
+		<div class="msgtext"><div class="msgtime"><?php echo substr($v[saytime],10);?></div><?php echo $v[saytext];?><?php if($v[huifu]){?><br>管理员回复：<?php echo $v[huifu];?><?php }?></div>
+	</li>
+<?php
+}
+}else{
+	?><div class="nors">暂无记录！</div><?php
+}
+?>
+		</ul>
+		<div class="title3 btitle3">
+			<label><input type="checkbox" value="1" name="chkall" onClick="CheckAll(this.form,this);" />全选</label>
+			<input type="submit" name="submit" value="删除" />
+		</div>
+		<?php echo $pagehtml;?>
+	</div>
+</form>
+<script>
+$('form[name="msgform"]').submit(function(){
+	var that=this;
+	if($(that).find('input[name="id[]"]:checked').length==0){
+		layerr('请先选择反馈信息！');
+		return false;
+	}
+	layer.confirm('确定删除这些反馈信息吗？',{icon:3,title:'删除反馈信息'},function(index){
+		$.post("<?php echo url('/ucenter/delfankui');?>",$(that).serialize(),function(res){
+			if(res.ok){
+				layok('删除成功！',function(){
+					$('input[name="id[]"]:checked').each(function(){
+						var liid=$(this).val();
+						$('li[idvalue="'+liid+'"]').remove();
+					});
+					if($('form[name="msgform"] li').length==0){
+						location.reload();
+					}
+				});
+			}else{
+				layerr(res.msg);
+			}
+		},'json');
+		layer.close(index);
+	},function(index){layer.close(index);});
+	return false;
+});
+$(".msg li .msgtitle,.msg li .msgicon").click(function(e) {
+	if($(this).parents("li").hasClass("open")){
+		$(this).parents("li").removeClass("open");
+	}else{
+		$(this).parents("li").addClass("open");
+	}
+});
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+</div>
+{/block}
+{block name="files"}{/block}
+{block name="script"}{/block}

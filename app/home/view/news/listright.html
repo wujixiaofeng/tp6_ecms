@@ -1,0 +1,49 @@
+
+			<div class="newslist1">
+				<div class="title"><h3>文章推荐</h3></div>
+				<ul>
+					<?php 
+					foreach($tuijian as $k=>$v){
+						?>
+							<li>
+								<a href="<?php echo $v[titleurl]?>" class="img"><img src="<?php echo $v[titlepic]?>" alt="<?php echo $v[title]?>" /></a>
+								<div class="fr">
+									<a href="<?php echo $v[titleurl]?>"><?php echo $v[title]?></a>
+									<div class="date"><?php echo date("Y-m-d",$v[newstime])?></div>
+								</div>
+							</li>
+						<?php
+					}?>
+				</ul>
+			</div>
+			<div class="mainrightapp"><a href="/app.html"><img src="/skin/dir2/images/mainrightapp.jpg" /></a></div>
+			<div class="newslist4">
+				<div class="listtitle"><h3>精美图赏</h3></div>
+				<ul>
+					<?php
+					foreach($tuijian2 as $k=>$v){
+						?>
+							<li>
+								<a href="<?php echo $v[titleurl]?>" class="img" target="_blank"><img src="<?php echo $v[titlepic]?>" alt="<?php echo $v[title]?>" /></a>
+								<a href="<?php echo $v[titleurl]?>" class="bbg" target="_blank">播放</a>
+								<a href="<?php echo $v[titleurl]?>" class="title" target="_blank"><?php echo $v[title]?></a>
+							</li>
+						<?php
+					}?>
+				</ul>
+			</div>
+			<div class="newslist4">
+				<div class="listtitle"><h3>视频推荐</h3></div>
+				<ul>
+					<?php
+					foreach($tuijian3 as $k=>$v){
+						?>
+							<li>
+								<a href="<?php echo $v[titleurl]?>" class="img" target="_blank"><img src="<?php echo $v[titlepic]?>" alt="<?php echo $v[title]?>" /></a>
+								<a href="<?php echo $v[titleurl]?>" class="bbg" target="_blank">查看</a>
+								<a href="<?php echo $v[titleurl]?>" class="title" target="_blank"><?php echo $v[title]?></a>
+							</li>
+						<?php
+					}?>
+				</ul>
+			</div>

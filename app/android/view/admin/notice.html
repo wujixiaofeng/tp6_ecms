@@ -1,0 +1,147 @@
+{extend name="base/base"}
+{block name="body"}
+<form id="addform" action="<?php echo safe_action();?>" method="post" enctype="multipart/form-data" target="ifr1">
+	<table width="100%" align="center" class="table1">
+		<tr>
+			<th align="right" width="150">消息标题：</th>
+			<td><input type="text" name="title" value="{$info['title']}" /></td>
+		</tr>
+		<tr>
+			<th align="right">消息内容：</th>
+			<td><textarea name="info">{$info['info']}</textarea></td>
+		</tr>
+		<tr>
+			<th align="right">可以不再提示：</th>
+			<td><input type="checkbox" name="cannotips" value="1" <?php echo $info['cannotips']?' checked':''?> /></td>
+		</tr>
+		<tr>
+			<th align="right">是否禁用：</th>
+			<td><input type="checkbox" name="jinyong" value="1" <?php echo $info['jinyong']?' checked':''?> /></td>
+		</tr>
+		<tr>
+			<th align="right">提示次数：</th>
+			<td><input type="text" name="times" value="{$info['times']}" /> 空或0表示不限次数</td>
+		</tr>
+		<tr>
+			<th align="right">提示条件：</th>
+			<td>
+				<label><input type="radio" name="ctype" value="all" />全部用户</label>
+				<label><input type="radio" name="ctype" value="con" />符合条件用户</label>
+				<ul id="condition" style="display:none;">
+					<div id="cadd">+</div>
+				</ul>
+				<div class="size0" id="addnewhtml">
+					<li>
+					<select name="cname[]">
+						<option value="">请选择条件</option>
+						<option value="userid">用户ID等于</option>
+						<option value="androidid">AndoridID等于</option>
+						<option value="snum">序列号等于</option>
+						<option value="mac">MAC等于</option>
+						<option value="brand">品牌等于</option>
+						<option value="model">型号等于</option>
+						<option value="nowvercode_eq">APP版本等于</option>
+						<option value="nowvercode_gt">APP版本大于</option>
+						<option value="nowvercode_lt">APP版本小于</option>
+						<option value="oldvercode_eq">旧APP版本等于</option>
+						<option value="oldvercode_gt">旧APP版本大于</option>
+						<option value="oldvercode_lt">旧APP版本小于</option>
+						<option value="sdk_eq">系统版本等于</option>
+						<option value="sdk_gt">系统版本大于</option>
+						<option value="sdk_lt">系统版本小于</option>
+						<option value="ip">IP等于</option>
+						<option value="isfirst">首次运行</option>
+					</select>
+					<input type="text" name="cvalue[]" />
+					</li>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<th></th>
+			<td><input type="submit" value="提交" /></td>
+		</tr>
+	</table>
+</form>
+<iframe name="ifr1" class="size0"></iframe>
+{/block}
+{block name="style"}
+<style>
+input[type="text"][name="title"]{width:350px;}
+#condition{margin-top:5px; padding:5px; background:#eeeeee; border-radius:5px;}
+#condition li{margin-bottom:5px;}
+#cadd{width:20px; height:20px; padding:5px; line-height:20px; text-align:center; background:#dddddd; border-radius:5px; font-size:20px;}
+</style>
+{/block}
+{block name="script"}
+<script>
+$(document).ready(function(){
+	
+	<?php
+	if($info){
+		if($info['condition']=='all'){
+			?>$('input[type="radio"][value="all"]').attr('checked',true);<?php
+		}else{
+			?>
+			$('#condition').show();
+			$('input[type="radio"][value="con"]').attr('checked',true);
+			<?php
+			foreach($info['condition'] as $k=>$v){
+				?>addnewcon();$('#condition li:last select').val('<?php echo $k;?>');$('#condition li:last input[name="cvalue[]"]').val('<?php echo $v;?>');<?php
+			}
+		}
+	}?>
+	
+	$('input[name="ctype"]').click(function(){
+		if($(this).val()=='all'){
+			$('#condition').hide();
+		}else{
+			$('#condition').show();
+		}
+	});
+	function addnewcon(){
+		var html=$('#addnewhtml').html();
+		if($('#condition li').length>0){
+			$(html).insertAfter('#condition li:last');
+		}else{
+			$('#condition').prepend(html);
+		}
+	}
+	$('#cadd').click(addnewcon);
+	$('#addform').submit(function(){
+		var self=$(this);
+		if(!self.find('[name="title"]').val()){
+			self.find('[name="title"]').focus();
+			errmsg('请填写消息标题！');
+			return false;
+		}
+		if(!self.find('[name="info"]').val()){
+			self.find('[name="info"]').focus();
+			errmsg('请填写消息内容！');
+			return false;
+		}
+		if(self.find('[name="ctype"]:checked').length==0){
+			errmsg('请选择提示条件！');
+			return false;
+		}
+		if(self.find('[name="ctype"][value="con"]').is(':checked')){
+			var havevalue=false;
+			$('#condition li').each(function(){
+				if($(this).find('select').val()&&$(this).find('input').val()){
+					havevalue=true;
+				}
+			});
+			if(!havevalue){
+				errmsg('请选择和填写提示条件！');
+				return false;
+			}
+		}
+		$.post(self.attr("action"),self.serialize(),success,"json");
+		return false;
+		function success(data){
+			showmsg(data.msg,function(){if(data.goto)location.href=data.goto;},data.ok);
+		}
+	});
+});
+</script>
+{/block}

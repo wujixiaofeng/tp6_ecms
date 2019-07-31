@@ -1,0 +1,39 @@
+{extend name="base/base"}
+{block name="body"}
+{include file="ucenter/menu"}
+<div class="global msg2">
+<ul>
+	<script>
+		if(!isNaN($('.userweidu').html()))$('.userweidu').html(parseInt($('.userweidu').html())-1);
+		if($('.userweidu').html()=='0')$('.userweidu').remove();
+	</script>
+<?php
+foreach($userlist as $k=>$v){
+	$isfrom=$v['isfrom'];
+?>
+	<li class="clearfix">
+		<div class="clearfix minfo <?php echo $isfrom?"fr":"fl"?>">
+			<div class="uinfo <?php echo $isfrom?"fr":"fl"?>">
+				<img src="<?php echo user_avatar($v[fromuid])?>">
+			</div>
+			<div class="text <?php echo $isfrom?"fr":"fl"?>">
+				<div class="clearfix">
+					<div class="fl"><?php echo $v[fromuname]?></div>
+					<div class="fr"><?php echo $v[msgtimestr]?></div>
+				</div>
+				<?php echo $v[text]?>
+			</div>
+		</div>
+	</li>
+<?php
+}
+?>
+</ul>
+<div class="page2"><?php echo $pagehtml;?></div>
+{include file="ucenter/sendform"}
+</div>
+{/block}
+{block name="files"}
+<link href="/css/ucenter.css" rel="stylesheet" type="text/css" />
+{/block}
+{block name="script"}{/block}

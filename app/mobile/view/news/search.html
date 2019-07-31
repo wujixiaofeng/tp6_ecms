@@ -1,0 +1,28 @@
+{extend name="base/base"}
+{block name="body"}
+<div class="global overshow"><div class="p05em">{include file="news/searchform"}</div></div>
+<div class="global">
+<div class="p05em pt0">
+	<?php if($keywords){?>
+	<div class="news">
+	<?php if($list){?>
+		<ul>
+			{include file="public/newsli3"}
+		</ul>
+		<?php echo $pagehtml;?>
+	<?php }else{?>
+		<div class="nors">ÎÞ¼ÇÂ¼£¡</div>
+	<?php }?>
+	</div>
+	<?php }?>
+</div>
+</div>
+{/block}
+{block name="style"}
+<style>
+.overshow{overflow:visible;}
+.news{background:#fff; overflow:hidden;}
+.pt0{padding-top:0;}
+.page{margin-bottom:1em;}
+</style>
+{/block}

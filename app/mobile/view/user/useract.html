@@ -1,0 +1,18 @@
+<?php
+if($user['userid']>0){
+$user['havemsg']=updatehavemsg($user['username']);
+?>
+<li><a href="/ucenter.html" style="color:red;"><?php echo $user['username']?></a></li>
+<li><a href="/ucenter.html">个人中心</a></li>
+<?php if($user['havemsg']){?>
+	<li><a href="<?php echo "/ucenter/".($user[havemsg]&4?"sysmsg":($user[havemsg]&2?"atmsg":"usermsg")).".html"?>" class="havemsg"><i class="fa fa-envelope havemsganimate"></i> 我的消息</a></li>
+<?php }?>
+<li><a href="javascript:logout();" class="logout">退出</a></li>
+<?php
+}else{
+?>
+<li><a href="javascript:passport('login');">登录</a></li>
+<li><a href="javascript:passport('reg');">注册</a></li>
+<?php
+}
+?>

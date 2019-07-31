@@ -1,0 +1,228 @@
+{extend name="base/base1"}
+{block name="body"}
+<div class="wp addmain mt30 wbg">
+<?php if($classid>0){?>
+	<div id="newstips">
+		<b>投稿须知</b>
+		<p>1.与手机、平板电脑及其它穿戴设备相关的新闻评论、技术、产品、评测、应用技巧或玩机人工作、生活的文章，体裁不限，字数不限。</p>
+		<p>2.稿件形式可以是原创，也可以是编译文章。原创文章需是自己创作且没有在其他纸介或网络媒体上发表的（必须未发表的原创文章，同时授权我网站发表24小时后才允许发表到其它自媒体平台）；编译文章需附带原文并注明出处；作者需对稿件的真实性负责。稿费标准为50元/篇-500元/篇，支付时间为下月30号前。</p>
+		<p>3.来稿请直接在下文中进行填写，图片转换为".JPG"或".GIF"格式，必须在800像素宽以上。</p>
+		<p>4.必须在用户信息栏里填写清楚银行帐号信息及个人联系方式，以方便我们支付稿费。</p>
+		<p>5.请注明希望署名为真实姓名还是笔名，以及具体用哪个笔名。</p>
+		<p>6.如在24小时内文章未发布，则视为未通过，可自行处理。</p>
+	</div>
+	<form name="add" method="POST" enctype="multipart/form-data" action="/news/<?php echo $enews=='MEditInfo'?'edit':'add'?>.html">
+		<input type="hidden" name="classid" value="<?php echo $classid?>" />
+		<?php @include($modfile);?>
+		<?php if($showkey){?>
+		<table width="100%" border="0" align="center" cellpadding="10" cellspacing="0">
+			<?php echo $showkey?>
+		</table>
+		<?php }?>
+		
+		<div class="pdb10">
+			<?php if($mid==1 or $classid==25){?>
+				<input type="button" name="cuncaogao" value="存草稿">
+				<input type="button" name="ducaogao" value="读草稿">
+				<input type="button" name="qingchucaogao" value="清除草稿">
+				<input type="button" name="view" value="预览">
+			<?php }?>
+			<input type="submit" name="addnews" value="提交">
+			<?php
+				$ecmsfrom='/ucenter/tougao.html?a2=view';
+			?>
+			<input type="hidden" name="ecmsfrom" value="<?php echo $ecmsfrom?>" />
+			<input type=hidden value=<?php echo $enews?> name=enews>
+			<input name=id type=hidden id="id" value=<?php echo $id?>>
+			<input type=hidden value="<?php echo $filepass?>" name=filepass>
+			<input name=mid type=hidden id="mid" value=<?php echo $mid?>>
+		</div>
+	</form>
+	<?php }else{?>
+		<div class="selclass">
+			<table width="100%" border="0" align="center" cellpadding="10" cellspacing="0">
+				<tr> 
+					<!--<td width="100">选择栏目</td>-->
+					<td height="600" align="center">
+					<form action="?" name="selectclass">
+						<select name="classid" size="15" style="width:200px;">
+							<?php foreach($class_r as $k=>$v){
+								if(in_array($v['classid'],array(34,427,35,296,476))){?>
+								<option value="<?php echo $v[classid]?>"<?php if($v[classid]==$classid){?> selected<?php }?>><?php echo $v[classname]?></option>
+							<?php }}?>
+						</select><br><br>
+						<button type="submit" class="btn1">提交</button>
+					</form>
+					</td>
+				</tr>
+			</table>
+			<script>
+				$('form[name="selectclass"] option').dblclick(function(){
+					$(this).closest('form').submit();
+				});
+			</script>
+		</div>
+	<?php }?>
+</div>
+{/block}
+{block name="style"}
+<style>
+.uploadify object{filter:alpha(opacity=0); opacity:0;}
+.pdb10{padding:0 10px;}
+.pl6{padding-left:6px;}
+.addform{margin-bottom:30px; padding:30px; padding-bottom:40px; background:#fff; font-size:14px;}
+select{padding:8px; border:solid 1px #E5E6E8;}
+input[type="text"]{padding:8px 5px; font-size:14px; border:solid 1px #E5E6E8;}
+input[type="submit"],input[type="button"],input[type="reset"]{width:auto; height:30px; padding:0 15px;}
+textarea[name="smalltext"]{padding:8px; border:solid 1px #E5E6E8;}
+#newstips{padding:40px; background:#ddd; line-height:25px;}
+table td{padding:10px;}
+input[name="cuncaogao"],input[name="ducaogao"],input[name="qingchucaogao"]{display:none;}
+.caogaolist{padding:40px;}
+</style>
+{/block}
+{block name="script"}
+<script>
+var formaction='';
+var formtarget='';
+var viewaction='/news/preview.html';
+$(document).ready(function(){
+	$('input[value="预览"]').click(function(){
+		if(!formaction)formaction=$('form[name="add"]').attr('action');
+		if(!formtarget)formtarget=$('form[name="add"]').attr('target');
+		$('form[name="add"]').attr('action',viewaction);
+		$('form[name="add"]').attr('target','_blank');
+		$('form[name="add"]').submit();
+		$('form[name="add"]').attr('action',formaction);
+		$('form[name="add"]').attr('target',formtarget?formtarget:'');
+	});
+});
+function classidval(){
+	if($('select[name="classid"]').length>0){
+		return $('select[name="classid"]').val();
+	}else{
+		return $('input[name="classid"]').val();
+	}
+}
+
+function checkCK(){
+	var content=ckeditor.getData();
+	content=content.replace(/ /g,""); 
+	content=content.replace(/　/g,""); 
+	content=content.replace(/\s/g,""); 
+	content=content.replace(/ /g,""); 
+	content=content.replace(/<br\/>/g,""); 
+	content=content.replace(/<p><\/p>/g,""); 
+	content=content.replace(/<div><\/div>/g,""); 
+	if(content==null||content==""){ 
+		ckeditor.setData(""); 
+		return false; 
+	} 
+	return true; 
+}
+
+function checkvideourl(url){
+	if(parseURL(url)['params']['vid']){
+		return true;
+	}
+	if(url.match(/sid\/(.*?)\/v\.swf/)){
+		return true;
+	}
+	return false;
+}
+
+function parseURL(url){
+	var a=document.createElement('a');
+	a.href=url;
+	return {
+		source:url,
+		protocol:a.protocol.replace(':',''),
+		host:a.hostname,
+		port:a.port,
+		query:a.search,
+		params:(function(){
+			var ret={},
+				seg=a.search.replace(/^\?/,'').split('&'),
+				len=seg.length,i=0,s;
+			for(;i<len;i++){
+				if(!seg[i]){continue;}
+				s=seg[i].split('=');
+				ret[s[0]]=s[1];
+			}
+			return ret;
+		})(),
+		file:(a.pathname.match(/\/([^\/?#]+)$/i)||[,''])[1],
+		hash:a.hash.replace('#',''),
+		path:a.pathname.replace(/^([^\/])/,'/$1'),
+		relative:(a.href.match(/tps?:\/\/[^\/]+(.+)/)||[,''])[1],
+		segments:a.pathname.replace(/^\//,'').split('/')
+	};
+}
+$(document).ready(function(e){
+	if((typeof layer)=='undefined'){
+		layui.use(['layer'],function(){
+			window.layer = layui.layer;
+		});
+	}
+	$('form[name="add"]').submit(function(){
+		if($('form[name="add"]').attr('action')==viewaction)return true;
+		if(!classidval()){
+			if($('[name="classid"]').length>0)$('[name="classid"]').focus();
+			layerr('请先选择分类！');
+			return false;
+		}
+		if(!$('input[name="title"]').val()){
+			$('input[name="title"]').focus();
+			layerr('请先填写标题！');
+			return false;
+		}
+		if(!$('input[name="ftitle"]').val()){
+			$('input[name="ftitle"]').focus();
+			layerr('请先填写副标题！');
+			return false;
+		}
+		if(!$('input[name="titlepic"]').val()){
+			layerr('请先上传标题图片！');
+			return false;
+		}
+		if((typeof ckeditor)!='undefined'&&!checkCK()){
+			layerr('请填写投稿内容！');
+			return false;
+		}
+		if(typeof CKEDITOR!='undefined'){
+			for(instance in CKEDITOR.instances){
+				CKEDITOR.instances[instance].updateElement();
+			}
+		}
+		var formdata=$(this).serialize();
+		$.post($(this).attr('action'),formdata,function(res){
+			if(res.ok){
+				okmsg(res.msg,function(){
+					if(res.goto){
+						top.location.href=res.goto;
+					}else{
+						top.location.reload();
+					}
+				});
+			}else{
+				errmsg(res.msg);
+			}
+		},'json');
+		return false;
+	});
+});
+</script>
+{/block}
+{block name="files"}
+<link href="/skin/dir2/css/msgbox.css" rel="stylesheet" type="text/css" />
+<script src="/skin/dir2/js/msgbox.js"></script>
+<script>
+var newsuserdata={
+	'ismember':'1',
+	'userid':"<?php echo $user['userid']?>",
+	'username':"<?php echo $user['username']?>",
+	'rnd':"<?php echo $user['rnd']?>"
+};
+</script>
+<script src="/skin/dir2/js/qcaogao.js"></script>
+{/block}

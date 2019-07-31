@@ -1,0 +1,14 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	{include file="public/head"}
+	{block name="files"}{/block}
+	{block name="style"}{/block}
+	{block name="script"}{/block}
+</head>
+<body<?php echo $bodyClassName?' class="'.$bodyClassName.'"':''?>>
+	{include file="public/header2"}
+	{block name="body"}{/block}
+	{include file="public/footer"}
+</body>
+</html>

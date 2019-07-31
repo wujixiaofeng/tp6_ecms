@@ -1,0 +1,284 @@
+{extend name="base/base"}
+{block name="body"}
+<div class="global">
+<div class="p05em">
+<div>
+		
+			<div id="slide" class="slide">
+				<ul>
+				<?php
+					foreach($focus as $k=>$v){
+						if($v['tbname']=="news")$showedids[]=$v['id'];
+						if($v['tbname']=="pictures")$showedpicids[]=$v['id'];
+						?>
+							<li title="<?php echo $v["title"]?>"><a href="<?php echo $v['titleurl']?>"><img src="<?php echo $v["focusImg"]?>" /></a></li>
+						<?php
+					}
+				?>
+				</ul>
+				<div class="lbtn"></div>
+				<div class="rbtn"></div>
+			</div>
+			<script>$("#slide").slide();</script>
+			<div class="wrapper" style="display:none;">
+			<ul id="slider" class="slider">
+				<?php
+					foreach($focus as $k=>$v){
+						if($v['tbname']=="news")$showedids[]=$v['id'];
+						if($v['tbname']=="pictures")$showedpicids[]=$v['id'];
+						?>
+						<li>
+							<a href="<?php echo $v['titleurl']?>" target="_blank"><img src="<?php echo $v['focusImg']?>" alt="image1"/></a>
+							<div class="description">
+								<h3><?php echo $v['title']?></h3>
+							</div>
+						</li>
+						<?php
+					}
+				?>
+				</ul>
+
+				<div id="shadow" class="shadow"></div>
+
+				<div id="nav-arrows" class="nav-arrows">
+					<a href="javascript:void(0);">Next</a>
+					<a href="javascript:void(0);">Previous</a>
+				</div>
+
+				<!--<div id="nav-dots" class="nav-dots" style="display:none;">
+					<span class="nav-dot-current"></span>
+					<span></span>
+					<span></span>
+					<span></span>
+					<span></span>
+				</div>-->
+
+			</div><!-- /wrapper -->
+		<script type="text/javascript">
+			$(function() {
+
+				var Page = (function() {
+
+					var $navArrows = $( '#nav-arrows' )/*.hide()*/,
+						$navDots = $( '#nav-dots' ).hide(),
+						$nav = $navDots.children( 'span' ),
+						$shadow = $( '#shadow' ).hide(),
+						slicebox = $( '#slider' ).slicebox( {
+							onReady : function() {
+
+								$navArrows.show();
+								$navDots.show();
+								$shadow.show();
+
+							},
+							onBeforeChange : function( pos ) {
+
+								$nav.removeClass( 'nav-dot-current' );
+								$nav.eq( pos ).addClass( 'nav-dot-current' );
+
+							}
+						} ),
+						
+						init = function() {
+
+							initEvents();
+							
+						},
+						initEvents = function() {
+
+							// add navigation events
+							$navArrows.children( ':first' ).on( 'click', function() {
+
+								slicebox.next();
+								resetTimer();
+								return false;
+
+							} );
+
+							$navArrows.children( ':last' ).on( 'click', function() {
+								
+								slicebox.previous();
+								resetTimer();
+								return false;
+
+							} );
+
+							$nav.each( function( i ) {
+							
+								$( this ).on( 'click', function( event ) {
+									
+									var $dot = $( this );
+									
+									if( !slicebox.isActive() ) {
+
+										$nav.removeClass( 'nav-dot-current' );
+										$dot.addClass( 'nav-dot-current' );
+									
+									}
+									
+									slicebox.jump( i + 1 );
+									return false;
+								
+								} );
+								
+							} );
+							var timer=setInterval(function(){slicebox.next();},5000);
+							var resetTimer=function(){
+								clearTimeout(timer);
+								timer=setInterval(function(){slicebox.next();},5000);
+							}
+		var _initX = 0;
+		var _finishX = 0;
+		var _startX = 0;
+		var _startY = 0;
+		var ontouchstart=function(event) {
+			//stop=true;
+			clearTimeout(timer);
+			_startX = event.originalEvent.changedTouches[0].clientX;//event.touches[0].clientX;
+			_startY = event.originalEvent.changedTouches[0].clientY;//event.touches[0].clientY;
+			_initX = _startX;
+		}
+		var ontouchmove=function(event) {
+			var _endX = event.originalEvent.changedTouches[0].clientX;//event.touches[0].clientX;
+			var _endY = event.originalEvent.changedTouches[0].clientY;//event.touches[0].clientX;
+			if(Math.abs(_endY-_startY)>Math.abs(_endX-_startX)){
+				return;		
+			}
+			event.preventDefault();
+			_finishX = _endX;
+			var _absX = Math.abs(_endX-_startX);
+			var lastX = left;
+			if(_startX>_endX){
+				//left=parseInt(lastX)+_absX;
+				//if(left>($lis.length-1)*width)left=($lis.length-1)*width;
+				//$ul.css({left:"-"+left+"px"});
+			}else{
+				//left=parseInt(lastX)-_absX;
+				//if(left<0)left=0;
+				//$ul.css({left:"-"+left+"px"});
+			}
+			_startX = _endX;
+		}
+		//触屏  离开屏幕事件
+		var ontouchend=function(event) {
+			if(_finishX==0){
+				return;
+			}
+			bindEvent(_initX,_finishX);
+			_initX = 0;
+			_finishX = 0;
+			//stop=false;
+			resetTimer();
+		}
+		/**
+		 *  绑定触屏触发事件
+		 * @param start
+		 * @param end
+		 */
+		var bindEvent=function(start,end){
+			if(start >= end){
+				//var next=showing+1;
+				//if(next>($lis.length-1))next=($lis.length-1);
+				//show(next);
+				slicebox.next();
+			}else{
+				//var next=showing-1;
+				//if(next<0)next=0;
+				//show(next);
+				slicebox.previous();
+			}
+		}
+		$('#slider').bind('touchstart',ontouchstart);
+		//$('#slider').bind('touchend',ontouchend);
+		$('#slider').bind('touchmove',ontouchmove);
+		$(document).bind('touchend',ontouchend);
+							
+						};
+
+						return { init : init };
+
+				})();
+				
+    		var body=document.getElementsByTagName("body")[0];
+			if((typeof body.style.WebkitAnimation)!="undefined"){
+				$('#slide').remove();
+				$('.wrapper').show();
+				Page.init();
+			}else{
+				$('.wrapper').remove();
+			}
+
+			});
+		</script>
+		</div>
+<div class="index1">
+	<div class="i1tit clearfix"><h3>新闻</h3><h3>新品</h3><h3>评测</h3><h3>导购</h3><h3>家电</h3></div>
+	<div class="i1cont">
+	<?php foreach($classlist as $classid=>$list){?>
+			<blockquote>
+				<ol>{include file="public/newsli2"}</ol>
+			</blockquote>
+		<?php }?>
+	</div>
+</div>
+<script>$('.index1').tabbox();</script>
+
+<div class="box1">
+	<div class="box1tit"><h3>最新资讯</h3></div>
+	<div class="box1cont newslist1">
+		<ul>
+<?php
+foreach($zixun as $k=>$v){
+	?><li><span class="fa fa-play"></span><a href="<?php echo $v['titleurl']?>"><?php echo $v['title']?></a></li><?php
+}
+?>
+		</ul>
+	</div>
+</div>
+
+<div class="box1">
+	<div class="box1tit"><h3>智能家电</h3><a href="/jiadian/"><span>查看更多</span></a></div>
+	<div class="box1cont newslist5">
+		<ul>
+		<?php $list=$jiadian;?>
+		{include file="public/newsli3"}
+		</ul>
+	</div>
+</div>
+
+<div class="box1">
+	<div class="box1tit"><h3>最新评测</h3><a href="/pingche/"><span>查看更多</span></a></div>
+	<div class="box1cont newslist2">
+		<ul>
+<?php
+foreach($pingce as $k=>$v){
+	?>
+	<li>
+		<a href="<?php echo $v['titleurl']?>"><img src="<?php echo $v["titlepic"]?>" /></a>
+		<a href="<?php echo $v['titleurl']?>" class="tit"><?php echo $v['title']?></a>
+		<div class="smalltext"><?php echo subtext($v['smalltext'],70)?></div>
+	</li>
+	<?php
+}
+?>
+		</ul>
+	</div>
+</div>
+<?php foreach($classlist as $classid=>$list){?>
+<div class="box1">
+	<div class="box1tit"><h3><?php echo $class_r[$classid]['classname']?></h3><a href="/<?php echo $class_r[$classid]['classpath']?>/"><span>查看更多</span></a></div>
+	<div class="box1cont newslist5">
+		<ul>
+		{include file="public/newsli3"}
+		</ul>
+	</div>
+</div>
+<?php }?>
+</div>
+</div>
+{/block}
+{block name="files"}
+<link href="/files/slider.css" rel="stylesheet" type="text/css" />
+<script src="/files/jquery.slide.js"></script>
+<script src="/files/jquery.slicebox.js"></script>
+{/block}

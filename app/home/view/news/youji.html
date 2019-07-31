@@ -1,0 +1,94 @@
+{extend name="base/base3"}
+{block name="body"}
+
+<div class="blackbg"><div class="bg"></div></div>
+<div class="header2">
+	<div class="wp clearfix">
+		<a href="/" class="fl"><img src="/skin/dir2/youji/images/logo2.png" /></a>
+		<div class="title"><img src="/skin/dir2/youji/images/title_icon.png" /><?php echo str_replace(array('"',chr(13),chr(10)),"",$info[title])?></div>
+		<div class="fr"><script src="/youji/editlink?yjid=<?php echo $id?>"></script><a href="/youji/">返回列表</a></div>
+	</div>
+</div>
+
+	<div class="wp">
+		<div class="youji clearfix">
+			<div class="top clearfix">
+				<div class="fl">键盘也能翻页哦，试试←→键翻页图片</div>
+				<div class="fr clearfix">
+					<div class="fl clearfix"><a href="javascript:youji.share();" class="share"></a><?php if($info['checked']=="1"){?><a href="javascript:showpl(<?php echo $id?>);" class="showpl"></a><?php }?></div>
+				<a href="/youji/add.html" target="_blank"><img src="/skin/dir2/youji/images/btn_write.png" /></a>
+				</div>
+			</div>
+			<img src="/skin/dir2/youji/images/jiantou1.png" class="jiantou jiantou1" />
+			<img src="/skin/dir2/youji/images/jiantou2.png" class="jiantou jiantou2" />
+			<div class="list clearfix">
+				<?php
+				$imgi=0;
+				foreach($info['list'] as $k=>$v){
+					foreach($v["dlist"] as $kk=>$vv){
+					?>
+					<ul class="clearfix ul_<?php echo $k?>_<?php echo $kk?>">
+						<?php
+						foreach($info['list'][$k][dlist][$kk][plist] as $kkk=>$vvv){
+							$imgi++;
+							?>
+							<li class="li_<?php echo $vvv[id]?>">
+								<img src="<?php echo $vvv[cimg]?>" simg="<?php echo $vvv[simg]?>" />
+								<div class="desc">
+									<div class="bg"></div>
+									<div class="num"><span class="a"></span><span class="b"></span></div>
+									<div class="text"><?php echo str_replace(array('"',chr(13),chr(10)),"",$vvv[desc])?></div>
+								</div>
+							</li>
+							<?php
+						}
+						?>
+					</ul><?php
+					}
+				}?>
+			</div>
+			<div class="right">
+				<div class="prevul">上个图集</div>
+				<div class="prevpage"><img src="/skin/dir2/youji/images/slist_prev.png" /></div>
+				<div class="slist">
+					<ul></ul>
+				</div>
+				<div class="nextpage"><img src="/skin/dir2/youji/images/slist_next.png" /></div>
+				<div class="nextul">下个图集</div>
+			</div>
+		</div>
+		<ul class="bottommenu clearfix">
+			<div class="xianlu"><a href="javascript:showmap(<?php echo $id?>);">行程线路</a></div>
+			<?php
+			foreach($info['list'] as $k=>$v){
+				if(isset($v[dlist]["0"])){
+					?><li<?php echo $v[day]==1?' class="cur"':""?> title="第<?php echo $v[day]?>天" id="key_<?php echo $k?>_0">D<?php echo $v[day]?></li><?php
+				}else{
+					?><li title="第<?php echo $v[day]?>天">D<?php echo $v[day]?></li><?php
+				}
+				foreach($v["dlist"] as $kk=>$vv){
+					if($kk!="0"){
+						?><li title="<?php echo $vv[name]?>" class="li2" id="key_<?php echo $k?>_<?php echo $kk?>"><span></span></li><?php
+					}
+				}
+			}?>
+			<div>End</div>
+		</ul>
+	</div>
+	<script>youji.init();</script>
+	<?php if($showcheckedtips){?><div class="donotshare">目前此信息还未审核通过，只有<?php echo ($info['ismember'] and $info['userid']==$user['userid'])?'你自己':'管理员'?>可以查看，请暂时不要分享此地址给其他人。</div><?php }?>
+{/block}
+{block name="style"}
+<style>
+body{background:url(<?php echo $info['background']?>) top center; background-size:100%; min-height:900px;}
+</style>
+{/block}
+{block name="script"}
+<script>var cnzzinfo={category:"<?php echo $class_r[$classid]['classname'];?>",label:"<?php echo $info['title'];?>"}</script>
+{/block}
+{block name="files"}
+<link href="/skin/dir2/youji/style.css" rel="stylesheet" type="text/css" />
+<link href="/skin/dir2/youji/xcConfirm/css/xcConfirm.css" rel="stylesheet" type="text/css" />
+<script src="/skin/dir2/youji/xcConfirm/js/xcConfirm.js"></script>
+	<script src="/skin/pai3/js/youji.js"></script>
+{/block}

@@ -1,0 +1,76 @@
+{extend name="base/base"}
+{block name="body"}
+	<table width="100%" align="center" class="table1 yudinglist">
+	<tr><th width="50">ID</th><th>标题</th><th>提示次数</th><th>可以不再提示</th><th>消息内容</th><th>提示条件</th><th>操作</th></tr>
+	<?php
+		if($list){
+			foreach($list as $k=>$v){
+				?>
+					<tr align="center" id="tr_{$v['id']}">
+						<td>{$v['id']}</td>
+						<td>{$v['title']}</td>
+						<td>{$v['times']}</td>
+						<td>{$v['cannotips']}</td>
+						<td><?php echo nl2br(tp_subtext($v['info'],22,'...'));?></td>
+						<td>{$v['condition']}</td>
+						<td id="handle_{$v['id']}">
+							<a href="<?php echo url('android/admin/notice',array('id'=>$v['id']));?>">修改</a>
+							<?php if($v['jinyong']){?>
+								<a href="javascript:jinyong(<?php echo $v['id'];?>);" class="color2" jinyong>已禁用</a>
+							<?php }else{?>
+								<a href="javascript:jinyong(<?php echo $v['id'];?>);" jinyong>禁用</a>
+							<?php }?>
+							<a href="javascript:del(<?php echo $v['id'];?>);">删除</a>
+						</td>
+					</tr>
+				<?php
+			}
+			if($pagehtml){
+				?><tr align="left"><td colspan="20"><?php echo $pagehtml;?></td></tr><?php
+			}
+		}else{
+			?><tr align="center"><td colspan="20"><div class="nors">暂无记录！</div></td></tr><?php
+		}
+	?>
+	</table>
+	<script>tr2();</script>
+{/block}
+{block name="script"}
+<script>
+function tr2(){
+	$('.table1 tr').removeClass('tr2').filter(':even').addClass('tr2');
+}
+function del(id){
+	layer.confirm('确定删除此消息吗？',{icon:3,title:'删除消息'},function(index){
+		$.get("{:url('android/admin/noticedel')}",{id:id},function(res){
+			if(res.ok){
+				okmsg(res.msg,function(){$('#tr_'+id).remove();tr2();});
+			}else{
+				errmsg(res.msg);
+			}
+		},'json');
+		layer.close(index);
+	},function(index){layer.close(index);});
+}
+
+function jinyong(id){
+	var yijinyong=$('#handle_'+id).find('a[jinyong]').hasClass('color2');
+	layer.confirm('确定'+(yijinyong?'取消':'')+'禁用此消息吗？',{icon:3,title:(yijinyong?'取消':'')+'禁用消息'},function(index){
+		$.get("{:url('android/admin/noticejinyong')}",{id:id},function(res){
+			if(res.ok){
+				okmsg(res.msg,function(){
+					if(yijinyong){
+						$('#handle_'+id).find('a[jinyong]').removeClass('color2').html('禁用');
+					}else{
+						$('#handle_'+id).find('a[jinyong]').addClass('color2').html('已禁用');
+					}
+				});
+			}else{
+				errmsg(res.msg);
+			}
+		},'json');
+		layer.close(index);
+	},function(index){layer.close(index);});
+}
+</script>
+{/block}

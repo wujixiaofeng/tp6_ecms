@@ -1,0 +1,92 @@
+{extend name="base/base"}
+{block name="body"}
+{include file="ucenter/menu"}
+<div class="global cmt">
+<form action="<?php echo url('/ucenter/cmtdelsel');?>" method="post">
+	<ul>
+	<?php
+	foreach($list as $k=>$v){
+		if(!$v['infotitle'])$v['infotitle']='无标题';
+		if(!$v['infourl'])$v['infourl']='javascript:void(0);';
+		if(!$v['infoimg'])$v['infoimg']='http://www.domain.com/skin/dir2/images/noimg.png';
+		$pltext=plbiaoqing($v[saytext]);
+		if($v[isdel])$pltext.="<br>[此评论已经被管理员删除！]";
+		?>
+		<li class="clearfix">
+			<input name="plid[]" type="checkbox" class="checkbox" value="<?php echo $v[plid]?>">
+			<a href="<?php echo $v['infourl']?>" class="img fl" target="_blank"><img src="<?php echo $v['infoimg']?>" /></a>
+			<div class="plinfo fr">
+				评论来自：<a href="<?php echo $v['infourl']?>" class="infotitle" target="_blank"><?php echo stripslashes($v['infotitle'])?></a>
+				<div class="plcont"><span>评论内容：</span><?php echo $pltext?></div>
+				<div class="clearfix">
+					<div class="time fl"><?php echo $v[saytime2]?></div>
+					<a href="<?php echo url('/ucenter/cmtdelsel',['plid'=>$v['plid']]);?>" class="delone fr" title="删除此评论"><i class="fa-trash" FontAwesome></i></a>
+				</div>
+			</div>
+		</li>
+		<?php
+	}
+	if($rscount==0){?><div class="nors">暂无记录！</div><?php }
+	?>
+	</ul>
+	<div class="bottom clearfix">
+		<div class="fl clearfix">
+			<input type="checkbox" name="chkall" class="checkall" />
+			<input type="submit" value="删除选中" />
+		</div>
+	</div>
+	<div class="page2"><?php echo $pagehtml?></div>
+	</form>
+</div>
+{/block}
+{block name="files"}
+<link rel="stylesheet" href="/css/ucenter.css" />
+{/block}
+{block name="script"}
+<script>
+$(document).ready(function(e){	
+	$('.checkall').click(function(){
+		if(this.checked){
+			$(this.form).find('.checkbox').each(function(){this.checked=true;});
+		}else{
+			$(this.form).find('.checkbox').each(function(){this.checked=false;});
+		}
+	});
+	$('form').submit(function(e){
+		var that=this;
+		if($(this).find(".checkbox:checked").length==0){
+			errmsg('请先选择要删除的评论！');
+			return false;
+		}
+		ConfirmBox({text:'确定删除吗？',title:'操作确认',ok:function(){
+			$.post($(that).attr("action"),$(that).serialize(),function(res){
+				if(res.ok){
+					okmsg('删除成功！',function(){location.reload();});
+				}else{
+					errmsg(res.msg);
+				}
+			}, "json");
+		}});
+		return false;
+	});
+	$('.delone').click(function(e){
+		var that=this;
+		ConfirmBox({text:'确定删除吗？',title:'操作确认',ok:function(){
+			$.get($(that).attr('href'),{is_ajax:1,t:Math.random()},function(res){
+				if(res.ok){
+					okmsg('删除成功！',function(){location.reload();});
+				}else{
+					errmsg(res.msg);
+				}
+			},'json');
+		}});
+		return false;
+	});
+});
+</script>
+{/block}
+{block name="style"}
+<style>
+img[src*="emoticons"]{width:1.5em; vertical-align:middle;}
+</style>
+{/block}

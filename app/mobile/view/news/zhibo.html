@@ -1,0 +1,47 @@
+{extend name="base/base"}
+{block name="body"}
+<div class="global">
+<div class="p05em">
+<div class="wbg">
+<div class="urhere">
+	<a href="/" class="home fa fa-home"></a>
+	<a href="/" class="home2">首页</a>
+	>
+	<a href="/<?php echo $class_r[$classid]['classpath']?>/" class="classname"><?php echo $class_r[$classid]['classname']?></a>
+</div>
+<h1><?php echo $info['title']?></h1>
+
+<div class="live">
+	<div class="title clearfix">
+		<div class="jiao"></div>
+		<div class="state"><span></span><?php echo $info['state']==0?"直播未开始":($info['state']==1?"正在直播":"直播结束")?></div>
+		<?php if($info['state']==0){?><div class="time"><?php echo date('Y-m-d',$info['newstime'])?>开始</div><?php }?>
+	</div>
+	
+	<ul class="clearfix">
+		<?php
+			foreach($info['list'] as $k=>$v){
+		?>
+				<li>
+					<div class="jiao"></div>
+					<div class="time"><?php echo $v['addtime']?></div>
+					<?php if($v['img']){?><img data-original="<?php echo $v['img']?>" /><?php }?>
+					<p><?php echo $v['text']?></p>
+				</li>
+		<?php }?>
+	</ul>
+<script>
+$(".live img").lazyload({threshold:200});
+</script>
+</div>
+<div id="pl"></div>
+<script>pl("<?php echo $classid?>","<?php echo $id?>");</script>
+</div>
+</div>
+</div>
+{/block}
+{block name="files"}
+<link rel="stylesheet" type="text/css" href="/files/pinglun.css" />
+<link rel="stylesheet" type="text/css" href="/files/zhibo.css" />
+<script src="/files/jquery.lazyload.js"></script>
+{/block}

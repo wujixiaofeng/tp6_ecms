@@ -1,0 +1,43 @@
+{extend name="base/base"}
+{block name="body"}
+<div class="global">
+<div class="p05em">
+<div class="listtitle">
+	<ul>
+		<li<?php if($class_r[$classid]['classpath']=='xinpin'){?> class="cur"<?php }?>><a href="/xinpin/">新品</a></li>
+		<li<?php if($class_r[$classid]['classpath']=='pingche'){?> class="cur"<?php }?>><a href="/pingche/">评测</a></li>
+		<li<?php if($class_r[$classid]['classpath']=='daogou'){?> class="cur"<?php }?>><a href="/daogou/">导购</a></li>
+		<!--<li<?php if($class_r[$classid]['classpath']=='video'){?> class="cur"<?php }?>><a href="/video/">视频</a></li>-->
+		<li<?php if($class_r[$classid]['classpath']=='xinwen'){?> class="cur"<?php }?>><a href="/xinwen/">新闻</a></li>
+		<li<?php if($class_r[$classid]['classpath']=='pic'){?> class="cur"<?php }?>><a href="/pic/">图赏</a></li>
+		<li<?php if($class_r[$classid]['classpath']=='youji'){?> class="cur"<?php }?>><a href="/youji/">游记</a></li>
+		<li<?php if($class_r[$classid]['classpath']=='zhibo'){?> class="cur"<?php }?>><a href="/zhibo/">直播</a></li>
+		<li<?php if($class_r[$classid]['classpath']=='jiadian'){?> class="cur"<?php }?>><a href="/jiadian/">家电</a></li>
+		<li<?php if($class_r[$classid]['classpath']=='jiqiao'){?> class="cur"<?php }?>><a href="/jiqiao/">技巧</a></li>
+		<li><a href="/editor.html">作者</a></li>
+			
+	</ul>
+</div>
+<div class="newslist2 p05em wbg overhide">
+<ul>
+<?php
+foreach($list as $k=>$v){
+$v['titleurl']=str_replace(array("http://www.domain.com","http://cnpai.com"),"",$v['titleurl']);
+$v['newstime']=date("Y-m-d",$v['newstime']);
+$bqi=1;
+?>
+	<li>
+		<a href="<?php echo $v['titleurl']?>"><img src="<?php echo $v['titlepic']?>" /></a>
+		<a href="<?php echo $v['titleurl']?>" class="tit"><?php echo $v['title']?></a>
+		<div class="smalltext"><?php echo subtext($v['smalltext'],70)?></div>
+	</li>
+<?php
+}?>
+</ul>
+<?php echo $pagehtml;?>
+</div>
+
+
+</div>
+</div>
+{/block}

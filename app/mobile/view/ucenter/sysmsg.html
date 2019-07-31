@@ -1,0 +1,124 @@
+{extend name="base/base"}
+{block name="body"}
+{include file="ucenter/menu"}
+<div class="global msg">
+<form id="form1" name="msgform" method="post" action="javascript:void(0);">
+<input type="hidden" name="tbtype" value="sys" />
+	<div class="title3">
+		<label><input type="checkbox" value="1" name="chkall" onClick="CheckAll(this.form,this);" />全选</label>
+		<input type="submit" name="submit" value="标记为已读" />
+		<input type="submit" name="submit" value="删除" />
+	</div>
+	<ul>
+<?php
+foreach($syslist as $k=>$v){
+	?>
+	<li idvalue="<?php echo $v[mid]?>">
+		<div class="clearfix">
+			<div class="ckinput"><input type="checkbox" name="mid[]" value="<?php echo $v[mid]?>" /></div>
+			<div class="msgicon"><i class="<?php echo $v[haveread]?"fa-envelope-open":"fa-envelope"?>" FontAwesome></i></div>
+			<div class="msgtitle"><?php echo tp_replaceand($v[title])?></div>
+		</div>
+		<div class="msgtext"><?php echo $v[msgtext]?><div class="msgtime"><?php echo $v[msgtime];?></div></div>
+	</li>
+	<?php
+}
+?>
+	</ul>
+	<?php if($rscount>1){?>
+	<div class="title3 btitle3">
+		<label><input type="checkbox" value="1" name="chkall2" onClick="CheckAll(this.form,this);" />全选</label>
+		<input type="submit" name="submit" value="标记为已读" />
+		<input type="submit" name="submit" value="删除" />
+	</div>
+	<?php }?>
+</form>
+<div class="page2"><?php echo $pagehtml;?></div>
+</div>
+{/block}
+{block name="files"}
+<link href="/css/ucenter.css" rel="stylesheet" type="text/css" />
+{/block}
+{block name="script"}
+<script>
+$(document).ready(function(){
+	$('#form1 input[type="submit"]').click(function(){
+		if($('.ckinput input:checked').length==0){
+			errmsg('请先选择消息！');
+			return false;
+		}
+		var submit=$(this).val();
+		var res=$('#form1').serializeArray();
+		res.push({name:'submit',value:submit});
+		if(submit=='删除'){
+			ConfirmBox({text:'确定删除吗？',title:'操作确认',ok:function(){
+				post();
+			}});
+		}else{
+			post();
+		}
+		function post(){
+			$.post("<?php echo url('/ucenter/handle')?>",$.param(res),function(res){
+				if(res.ok){
+					okmsg(res.msg,function(){
+						$('.ckinput input:checked').each(function(){
+							var mid=$(this).val();
+							if(submit=='删除'){
+								$('li[idvalue="'+mid+'"]').remove();
+							}else{
+								$("li[idvalue='"+mid+"']").find(".msgicon i").removeClass("fa-envelope").addClass("fa-envelope-open");
+							}
+							updateHaveMsg();
+						});
+						$('#form1 input:checkbox').each(function(){
+							$(this)[0].checked=false;
+						});
+					});
+				}else{
+					errmsg(res.msg);
+				}
+			},'json');
+		}
+		return false;
+	});
+	$(".msg li .msgtitle,.msg li .msgicon").click(function(e) {
+		if($(this).parents("li").hasClass("open")){
+			$(this).parents("li").removeClass("open");
+		}else{
+			$(this).parents("li").addClass("open");
+			var id=$(this).parents("li").attr("idvalue");
+			if($(this).parents("li").find(".msgicon i").hasClass("fa-envelope-open"))return;
+			$.post("<?php echo url('/ucenter/handle')?>",{tbtype:'sys',submit:'read',mid:id},function(data){
+				if(data.ok){
+					if(data.nomsg)$("[title='您有未读消息']").remove();
+					$("li[idvalue='"+id+"']").find(".msgicon i").removeClass("fa-envelope").addClass("fa-envelope-open");
+					updateHaveMsg();
+				}
+				if(data.msg){
+					//showmsg(data.msg,0,data.ok);
+				}
+			},"json");
+		}
+	});
+	$('.msgtext').find('a').each(function(index,element){
+		if($(this).attr('target')!='_blank'){
+			$(this).attr('target','_blank');
+		}
+	});
+});
+function updateHaveMsg(){
+	if(!isNaN($('.sysweidu').html())){
+		$('.sysweidu').html(parseInt($('.sysweidu').html())-1);
+		$('.weidu').html(parseInt($('.weidu').html())-1);
+	}
+	if($('.sysweidu').html()=='0')$('.sysweidu').remove();
+	if($('.weidu').html()=='0'){
+		$('.weidu').remove();
+		$('.havemsg').remove();
+	}
+}
+function CheckAll(form,chkall){
+	$(form).find(':checkbox').prop('checked',$(chkall).is(':checked'));
+}
+</script>
+{/block}

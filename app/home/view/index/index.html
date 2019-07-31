@@ -1,0 +1,167 @@
+{extend name="base/base"}
+{block name="body"}
+<div class="iheader">
+
+	<div class="top">
+		<div class="wp clearfix">
+			<div class="qrcode">
+				<div class="qrcodetip">关注domain公众号</div>
+				<div class="jiao"></div>
+				<div class="qrcodeimg"><img src="/skin/dir2/images/qrcode.jpg" /></div>
+			</div>
+			<a class="app" href="/app.html" target="_blank">下载客户端</a>
+			<div id="topuseract" class="useract"></div>
+		</div>
+	</div>
+	<div class="nav">
+		<div class="wp clearfix">
+			<a href="/" class="logo"><img src="/skin/dir2/images/logo1.png" /></a>
+			<ul class="clearfix">
+				<li><a href="/">首页</a></li>
+				<li><a href="#zixun">资讯</a></li>
+				<li><a href="/pic/">图赏</a></li>
+				<li><a href="/video/">视频</a></li>
+				<li><a href="/zhibo/">直播</a></li>
+				<li><a href="/youji/">游记</a></li>
+				<li><a href="/zhuanti.html">专题</a></li>
+			</ul>
+			<div class="topsch">{include file="public/searchform"}</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+<div class="wp2">
+<div id="focus" class="focus">
+	<ul>
+	<?php
+		foreach($focus as $k=>$v){
+			if($v[tbname]=="news")$showedids[]=$v[id];
+			?>
+			<li>
+				<a href="<?php echo $v[titleurl]?>" target="_blank" title="<?php echo $v[title]?>"><img src="<?php echo $v[focusImg]?>" alt="<?php echo $v[title]?>" /></a>
+			</li>
+			<?php
+		}
+	?>
+	</ul>
+	<div class="lbtn"></div>
+	<div class="rbtn"></div>
+</div>
+<script>windowwidth();$("#focus").slide();</script>
+<div class="newsclass">
+	<div class="wp clearfix">
+		<a name="zixun"></a>
+		<h3>domain-资讯</h3>
+		<ul>
+			<li><a href="/xinpin/">手机新品</a></li>
+			<li><a href="/xinwen/">行业新闻</a></li>
+			<li><a href="/pingche/">产品评测</a></li>
+			<li><a href="/daogou/">购机推荐</a></li>
+			<li><a href="/jiadian/">智能家电</a></li>
+		</ul>
+	</div>
+</div>
+</div>
+<div class="wp">
+	<div class="cont3">
+		<ul class="clearfix">
+			<?php
+			foreach($cont3 as $k=>$v){
+				$showedids[]=$v[id];
+				?><li>
+					<a href="<?php echo $v[titleurl]?>" class="img" target="_blank"><img src="<?php echo $v[titlepic]?>" alt="<?php echo $v[title]?>" /></a>
+					<a href="/<?php echo $class_r[$v[classid]][classpath]?>/" target="_blank" class="class"><?php echo $class_r[$v[classid]][classname]?></a>
+					<div class="newsinfo">
+						<a href="<?php echo $v[titleurl]?>" class="title" target="_blank" title="<?php echo $v[title]?>"><?php echo $v[title]?></a>
+						<div class="smalltext"><?php echo subtext($v[smalltext],70);?></div>
+					</div>
+				</li><?php
+			}?>
+		</ul>
+		<script>var showedids='<?php echo implode(',',$showedids)?>';</script>
+		<a href="javascript:indexcont3more();" class="more">点击加载更多</a>
+	</div>
+</div>
+<div class="wp overhide">
+	<div class="videobig clearfix">
+			<?php
+			$v=current($video);
+			if($v){
+				?>
+					<div class="left">
+						<div class="class">视频</div>
+						<a href="<?php echo $v[titleurl]?>" class="img" target="_blank"><img src="<?php echo $v[titlepic]?>"</a>
+						<a href="<?php echo $v[titleurl]?>" class="play" target="_blank"></a>
+					</div>
+					<div class="videoinfo">
+						<a href="<?php echo $v[titleurl]?>" class="title" target="_blank"><?php echo $v[title]?></a>
+						<div class="smalltext"><?php echo subtext($v[smalltext],120);?></div>
+						<a href="/video/" class="btn" target="_blank">查看更多</a>
+					</div>
+				<?php
+			}?>
+	</div>
+	<div class="video clearfix">
+		<ul>
+			<?php
+			while($v=next($video)){
+				?><li>
+					<a href="<?php echo $v[titleurl]?>" class="img" target="_blank"><img src="<?php echo $v[titlepic]?>" alt="<?php echo $v[title]?>" /></a>
+					<a href="<?php echo $v[titleurl]?>" class="play" target="_blank"></a>
+					<a href="<?php echo $v[titleurl]?>" class="title" target="_blank"><?php echo $v[title]?></a>
+					<div class="class">视频</div>
+				</li><?php
+			}?>
+		</ul>
+	</div>
+</div>
+<div class="tushang newslist4">
+	<div class="wp">
+		<div class="listtitle"><h4>精美图赏</h4></div>
+		<ul class="clearfix">
+			<?php foreach($pic as $k=>$v){
+				?>
+					<li>
+						<a href="<?php echo $v[titleurl]?>" class="img" target="_blank"><img src="<?php echo $v[titlepic]?>" alt="<?php echo $v[title]?>" /></a>
+						<a href="<?php echo $v[titleurl]?>" class="bbg" target="_blank">查看</a>
+						<a href="<?php echo $v[titleurl]?>" class="title" target="_blank"><?php echo $v[title]?></a>
+					</li>
+				<?php
+			}?>
+		</ul>
+	</div>
+</div>
+<div class="youji">
+	<div class="wp">
+		<div class="title1"><h3><a href="/youji/" target="_blank">手机游记</a></h3><a href="/youji/add.html" class="fr" target="_blank">发表游记</a></div>
+		<div class="list">
+			<ul class="clearfix">
+			<?php
+			foreach($youji as $k=>$v){
+				$i++;
+				?>
+					<li class="li">
+						<a class="img" href="<?php echo $v[titleurl]?>" target="_blank"><img src="<?php echo $v[titlepic]?>" alt="<?php echo $v[title]?>" /></a>
+						<a href="<?php echo $v[titleurl]?>" class="title" target="_blank"><?php echo $v[title]?></a>
+						<div class="shang"><?php echo $v[username2]?$v[username2]:"暂无"?></div>
+					</li>
+				<?php
+			}
+			?>
+			</ul>
+			<?php
+			if($i==0){
+				?><div class="nors">暂无记录！</div><?php
+			}
+			?>
+		</div>
+	</div>
+</div>
+{/block}
+{block name="files"}
+<link href="/skin/dir2/css/index.css" rel="stylesheet" type="text/css" />
+<script src="/skin/dir2/js/slide3.js"></script>
+{/block}

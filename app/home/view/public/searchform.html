@@ -1,0 +1,6 @@
+<form target="_blank" action="/news/search.html" id="header_searchform">
+	<input type="hidden" name="tbname" value="news" />
+	<div class="text"><input type="text" name="keywords" class="text" /></div>
+	<div class="btn"><input type="submit" class="submit" value="" /></div>
+</form>
+<script>$('#header_searchform').submit(function(){if(!$(this).find('input[name="keywords"]').val()){errmsg('ÇëÌîĞ´¹Ø¼ü´Ê£¡');return false;}});</script>

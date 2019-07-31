@@ -1,0 +1,60 @@
+{extend name="base/base"}
+{block name="body"}
+{include file="ucenter/menu"}
+<div class="global">
+<h4>修改安全资料</h4>
+<form method="post" id="form2" action="<?php echo safe_action();?>">
+	<div class="input2 clearfix">
+		<label class="label">原密码：</label>
+		<input type="password" class="input" name="oldpassword" id="oldpassword" />
+	</div>
+	<div class="input2 clearfix">
+		<label class="label">新密码：</label>
+		<input type="password" class="input" name="password" id="password" />
+	</div>
+	<div class="input2 clearfix">
+		<label class="label">重复密码：</label>
+		<input type="password" class="input" name="repassword" id="repassword" />
+	</div>
+	<div class="input2 clearfix">
+		<label class="label">邮箱：</label>
+		<input type="text" class="input" name="email" id="email" value="<?=$user[email]?>" />
+	</div>
+	<input type='submit' value='修改' id="submit2">
+</form>
+</div>
+{/block}
+{block name="files"}
+<link href="/css/ucenter.css" rel="stylesheet" type="text/css" />
+{/block}
+{block name="script"}
+<script>
+$(document).ready(function(e){
+	$("#form2").submit(function(){
+		var self = $(this);
+		if(!self.find('input[name="oldpassword"]').val()){
+			errmsg('请填写旧密码！');
+			return false;
+		}
+		if(self.find('input[name="password"]').val()!=self.find('input[name="repassword"]').val()){
+			errmsg('重复密码不正确！');
+			return false;
+		}
+		if(!isemail(self.find('input[name="email"]').val())){
+			errmsg('请填写正确的电子邮箱！');
+			return false;
+		}
+		$.post(self.attr("action"), self.serialize(), success, "json");
+		return false;
+
+		function success(res){
+			if(res.ok){
+				okmsg(res.msg,function(){location.reload();});
+			} else {
+				errmsg(res.msg);
+			}
+		}
+	});
+});
+</script>
+{/block}

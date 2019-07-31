@@ -1,0 +1,116 @@
+{extend name="base/base1"}
+{block name="body"}
+<div class="wp mt20 mb50 clearfix">
+	<div class="userleft">
+		{include file="ucenter/menu"}
+	</div>
+	<div class="userright pinglun">
+	<div class="righttitle1"><?php echo $pagetitle;?></div>
+	<form action="<?php echo url('/ucenter/cmtdelsel');?>" method="post">
+	<ul>
+	<?php
+	foreach($list as $k=>$v){
+		if(!$v['infotitle'])$v['infotitle']='无标题';
+		if(!$v['infourl'])$v['infourl']='javascript:void(0);';
+		if(!$v['infoimg'])$v['infoimg']='/skin/dir2/images/noimg.png';
+		$pltext=plbiaoqing($v[saytext]);
+		if($v[isdel])$pltext.="<br>[此评论已经被管理员删除！]";
+		?>
+		<li id="plli_<?php echo $v['plid']?>">
+			<input name="plid[]" type="checkbox" class="checkbox" value="<?php echo $v['plid']?>">
+			<div class="plinfo">
+				<div class="clearfix">
+					<a href="<?php echo $v['infourl']?>" class="infotitle fl" target="_blank"><?php echo stripSlashes($v['infotitle'])?></a>
+					<div class="time fr"><?php echo $v[saytime2]?></div>
+				</div>
+				<div class="mt20 clearfix">
+					<a href="<?php echo $v['infourl']?>" class="img fl" target="_blank"><img src="<?php echo $v['infoimg']?>" /></a>
+					<div class="plcont fr"><span>评论内容：</span><?php echo $pltext?></div>
+				</div>
+			</div>
+			<a href="<?php echo url('/ucenter/cmtdelsel',['plid'=>$v['plid']]);?>" plid="<?php echo $v[plid]?>" class="delone" title="删除此评论"></a>
+		</li>
+		<?php
+	}
+	if($rscount==0){?><div class="nors">暂无记录！</div><?php }
+	?>
+	</ul>
+	<div class="bottom clearfix">
+		<div class="fl clearfix">
+			<input type="checkbox" name="chkall" class="checkall" />
+			<input type="submit" value="删除选中" />
+		</div>
+		<div class="fr"><?php echo $pagehtml;?></div>
+	</div>
+	</form>
+</div>
+</div>
+{/block}
+{block name="style"}
+<style>
+input{padding:5px;}
+img[src*="emoticons"]{vertical-align:middle;}
+</style>
+{/block}
+{block name="files"}{/block}
+{block name="script"}
+<script>
+$(document).ready(function(e){	
+	$('.checkall').click(function(){
+		if(this.checked){
+			$(this.form).find('.checkbox').each(function(){this.checked=true;});
+		}else{
+			$(this.form).find('.checkbox').each(function(){this.checked=false;});
+		}
+	});
+	$('form').submit(function(e){
+		var that=this;
+		if($(this).find(".checkbox:checked").length==0){
+			layerr('请先选择要删除的评论！');
+			return false;
+		}
+		layer.confirm('确定删除吗？',{icon:3,title:'删除评论'},function(index){
+			$.post($(that).attr("action"),$(that).serialize(),function(data){
+				if(data.ok){
+					layok('删除成功！',function(){
+						$('input[name="plid[]"]:checked').each(function(){
+							var plid=$(this).val();
+							$('#plli_'+plid).remove();
+						});
+						if($('.userright.pinglun li').length==0){
+							location.reload();//pagej1();
+						}
+					});
+				}else if(data.msg){
+					layerr(data.msg);
+				}
+			}, "json");
+		},function(index){layer.close(index);});
+		return false;
+	});
+	$('.delone').click(function(e){
+		var that=this;
+		layer.confirm('确定删除吗？',{icon:3,title:'删除评论'},function(index){
+			$.get($(that).attr('href'),{is_ajax:1,t:Math.random()},function(data){
+				if(data.ok){
+					layok('删除成功！',function(){
+						$('#plli_'+$(that).attr('plid')).remove();//location.reload();
+						if($('.userright.pinglun li').length==0){
+							location.reload();//pagej1();
+						}
+					});
+				}else if(data.msg){
+					layerr(data.msg);
+				}
+			},'json');
+		},function(index){layer.close(index);});
+		return false;
+	});
+});
+</script>
+{/block}
+{block name="style"}
+<style>
+img[src*="emoticons"]{width:1.5em; vertical-align:middle;}
+</style>
+{/block}

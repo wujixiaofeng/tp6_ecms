@@ -1,0 +1,131 @@
+{extend name="base/base"}
+{block name="body"}
+{include file="public/header1"}
+<div class="newscont">
+	<div class="newstop" style="background:url(/d/topimg/<?php echo $id%20?>.jpg) center no-repeat;">
+    	<div class="wp">
+			<div class="mainleft">
+				<div class="newsclass"><a href="/<?php echo $class_r[$classid][classpath]?>/"><?php echo $class_r[$classid][classname]?></a></div>
+				<h1 class="newstitle"><?php echo $info[title]?></h1>
+			</div>
+        </div>
+    </div>
+	<div class="wp clearfix">
+		<div class="mainleft posr">
+			<div class="newscont">
+				<div class="whiteleft posa"></div>
+				<div class="conttop">
+					<div class="newsinfo">
+						<div class="befrom"><?php echo $info[befrom]?></div>
+						<div class="date"><?php echo $info[newstime]?></div>
+						<div class="author">作者：<?php echo $info[writer]?$info[writer]:$info[username]?></div>
+						<a href="#tosaypl">我有话要说</a>
+					</div>
+					<div class="keywords clearfix">
+						<ul>
+							<?php $keywords=explode(",",$info[keyboard]);foreach($keywords as $v){?>
+								<li><a href="/news/search.html?tbname=news&keywords=<?php echo $v?>" target="_blank"><?php echo $v?></a></li>
+							<?php }?>
+						</ul>
+					</div>
+				</div>
+				<div class="newstext">
+				<?php echo $info['html'];?>
+					<script>
+					var dianping="<?php echo $info[dianping]?>";
+					var gaofei="<?php echo $info[gaofei]?>";
+					if(dianping !="" && gaofei!=""){
+						document.writeln("<div class='dianping'>编辑点评："+dianping+"，经编辑部决定，奖励稿费"+gaofei+"元。希望广大读者踊跃投稿，为大家带上更多更精彩的文章，投稿文章可以发送至<a href='mailto:tougao@domain.com'>tougao@domain.com</a>，或者直接在本网站<a href='/e/DoInfo/AddInfo.php?classid=501&mid=1'>投稿</a>。本文作者请将银行账号及个人身份信息发送至本邮箱（或者填写在网站用户资料中），以便及时结算稿费。另外，请广大作者注意，所投稿件必须为全网首发，凡是投稿稿件在24小时之后才能发布到其它地方，否则无法支付稿费，请知悉！</div>");
+					}
+					</script>
+				</div>
+			</div>
+			<div class="xiangguan" newsid="<?php echo $id?>"></div>
+			<div class="authorinfo2">
+				<a href="/zuozhe<?php echo $info['ismember']?1:''?>-<?php echo $info['userid'];?>.html" class="authoravatar"><img src="<?php echo avatar($info[userid],$id,!$info[ismember])?>" /></a>
+				<a href="/zuozhe<?php echo $info['ismember']?1:''?>-<?php echo $info['userid'];?>.html" class="authorname"><?php echo $info[username]?></a>
+				<div class="date"><?php echo $info[newstime]?></div>
+				
+				<a href="javascript:zan3('<?php echo $classid?>','<?php echo $id?>');" class="zan"></a>
+				<a href="javascript:fav('<?php echo $classid?>','<?php echo $id?>');" class="fav"></a>
+				<script>
+					zan3('<?php echo $classid?>','<?php echo $id?>','checkzan');
+					fav('<?php echo $classid?>','<?php echo $id?>','check');
+				</script>
+			</div>
+			<div class="posa bdsharebuttonbox bdsharebuttonbox2">
+				<a title="分享到QQ空间" class="bds_qzone" href="javascript:void(0);" data-cmd="qzone"></a>
+				<a title="分享给QQ好友" class="bds_sqq" href="javascript:void(0);" data-cmd="sqq"></a>
+				<a title="分享到新浪微博" class="bds_tsina" href="javascript:void(0);" data-cmd="tsina"></a>
+				<a title="分享到微信" class="bds_weixin" href="javascript:void(0);" data-cmd="weixin"></a>
+			</div>
+		</div>
+		<div class="mainright bordertop">
+			<div class="authorinfo">
+				<div class="info">
+					<div class="infotips">编辑</div>
+					<div class="clearfix">
+						<a href="/zuozhe<?php echo $info['ismember']?1:''?>-<?php echo $info['userid'];?>.html" class="authoravatar"><img src="<?php echo avatar($info[userid],$id,!$info[ismember])?>" /></a>
+						<a href="/zuozhe<?php echo $info['ismember']?1:''?>-<?php echo $info['userid'];?>.html" class="authorname"><?php echo $info[username]?></a>
+						<div class="authorgroup"><?php echo $info[ismember]?"网站用户":"网站管理员";?></div>
+					</div>
+				</div>
+				<div class="authornews">
+					<div class="more">
+						<a href="/zuozhe<?php echo $info['ismember']?1:''?>-<?php echo $info['userid'];?>.html" class="fl">
+						TA的其他文章（<?php echo $empire->gettotal("SELECT count(*) as total FROM  phome_ecms_news where userid='".$info[userid]."'".($info[ismember]?" and ismember=1":""));?>）
+						</a>
+						<a href="/zuozhe<?php echo $info['ismember']?1:''?>-<?php echo $info['userid'];?>.html" class="fr">更多</a>
+					</div>
+					<ul>
+						<?php
+						foreach($usernewslist as $k=>$v){
+							?><li><a href="<?php echo $v[titleurl]?>"><?php echo $v[title]?></a></li><?php
+						}?>
+					</ul>
+				</div>
+			</div>
+			<div class="newslist1">
+				<div class="title"><h3>文章推荐</h3></div>
+				<ul>
+					<?php 
+					foreach($tuijian as $k=>$v){
+						?>
+							<li>
+								<a href="<?php echo $v[titleurl]?>" class="img"><img src="<?php echo $v[titlepic]?>" alt="<?php echo $v[title]?>" /></a>
+								<div class="fr">
+									<a href="<?php echo $v[titleurl]?>"><?php echo $v[title]?></a>
+									<div class="date"><?php echo date("Y-m-d",$v[newstime])?></div>
+								</div>
+							</li>
+						<?php
+					}?>
+				</ul>
+			</div>
+			<div class="mainrightapp"><a href="/app.html" target="_blank"><img src="/skin/dir2/images/mainrightapp.jpg" /></a></div>
+			<div class="shangxiapian">
+				<?php if($shangpian){?><a href="<?=$shangpian[titleurl]?>"><img src="<?=$shangpian[titlepic]?>" /><span class="blackbg"></span><span class="title"><?=$shangpian[title]?></span><span class="btn">上一篇</span></a><?php }?>
+				<?php if($xiapian){?><a href="<?=$xiapian[titleurl]?>"><img src="<?=$xiapian[titlepic]?>" /><span class="blackbg"></span><span class="title"><?=$xiapian[title]?></span><span class="btn">下一篇</span></a><?php }?>
+			</div>
+		</div>
+	</div>
+	<div class="cont2 clearfix">
+		<div class="wp">
+			<div class="mainleft">
+				<div id="pl"></div><script>pl(<?php echo $classid?>,<?php echo $id?>);</script>
+			</div>
+			<div class="mainright">
+				{include file="news/shenduhaowen"}
+			</div>
+		</div>
+	</div>
+</div>
+{/block}
+{block name="script"}
+<script>var cnzzinfo={category:"<?php echo $class_r[$classid]['classname'];?>",label:"<?php echo $info['title'];?>"}</script>
+{/block}
+{block name="files"}
+<link href="/skin/dir2/css/newsshow.css" rel="stylesheet" type="text/css" />
+<link href="/skin/dir2/css/pinglun.css" rel="stylesheet" type="text/css" />
+<script src="/skin/pai3/js/pinglun.js"></script>
+{/block}

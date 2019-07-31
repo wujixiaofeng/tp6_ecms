@@ -1,0 +1,56 @@
+{extend name="youji/base"}
+{block name="body"}
+<div id="noselect">
+<div class="upload_top">
+	<div class="wp clearfix">
+		<img src="/skin/dir2/youji/images/upload_top.jpg" class="fl" />
+	</div>
+</div>
+<form method="post" action="<?php echo safe_action();?>" id="form1">
+	<?php
+	foreach($dlist as $k=>$v){
+		?>
+		<div class="datebox mt20 wp">
+			<div class="dateinfo"><a>第<?php echo $v[day]?>天</a></div>
+			<ul class="desclist clearfix">
+				<?php
+				foreach($v["list"] as $kk=>$vv){
+					?>
+					<li class="photo" id="li_img_<?php echo $vv[id]?>">
+						<img src="<?php echo $vv[cimg]?>" id="img_<?php echo $vv[id]?>" idvalue="<?php echo $vv[id]?>" draggable="true" ondragstart="drag(event)" />
+						<div><textarea name="desc[<?php echo $vv[id]?>]"><?php echo $vv[desc]?></textarea></div>
+					</li>
+					<?php
+				}
+				?>
+			</ul>
+		</div>
+		<?php
+	}?>
+	<div class="wp wbg mt20 pd20">
+			<input type="hidden" name="yjid" value="<?php echo $id?>" />
+			<input type="submit" class="nextstep" value="下一步" />
+	</div>
+</form>
+</div>
+{/block}
+{block name="script"}
+<script>
+$(document).ready(function(){
+	$('#form1').submit(function(){
+		var self=$(this);
+		$.post(self.attr('action'),self.serialize(),function(res){
+			if(res.ok){
+				location=res.goto;
+				//okmsg(res.msg,function(){if(res.goto){location=res.goto;}});
+			}else{
+				errmsg(res.msg);
+			}
+		},'json');
+		return false;
+	});
+});
+</script>
+{/block}
+{block name="style"}
+{/block}

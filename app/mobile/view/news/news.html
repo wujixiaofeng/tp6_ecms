@@ -1,0 +1,97 @@
+{extend name="base/base"}
+{block name="body"}
+<div class="global">
+<div class="p05em">
+<div class="wbg">
+<div class="urhere">
+	<a href="/" class="home fa fa-home"></a>
+	<a href="/" class="home2">首页</a>
+	>
+	<a href="/<?php echo $class_r[$classid]['classpath']?>/" class="classname"><?php echo $class_r[$classid]['classname']?></a>
+</div>
+<h1><?php echo $info['title']?></h1>
+<div class="newsinfo">
+	<span><?php echo $info['newstime']?></span> |
+	<?php if($info['befrom']){?><span>来源：<?php echo $info['befrom']?></span> |<?php }?> 
+	<span>作者：<?php echo $info['writer']?$info['writer']:$info['username']?></span>
+</div>
+<div class="newskeywords">
+	<ul>
+		<?php
+		$keyboard=explode(',',$info['keyboard']);
+		foreach($keyboard as $keywords){
+			echo '<li>'.$keywords.'</li>';
+		}
+		?>
+	</ul>
+</div>
+<div class="newsdesc"><?php echo $info['smalltext']?></div>
+<div class="newscont"><?php echo $info['html']?></div>
+<script>newstextwidth();</script>
+<div id="pl"></div><script>pl("<?php echo $classid?>","<?php echo $id?>");</script>
+<div class="box1 wbg p05em">
+	<div class="box1tit"><h3>推荐文章</h3></div>
+	<div class="newslist3">
+<ul class="clearfix"><?php
+$bqi=0;
+foreach($info['tuijian'] as $k=>$v){
+	$bqi++;
+	?>
+	<li>
+		<a href="<?php echo $v['titleurl']?>"><img src="<?php echo $v['titlepic']?>" /></a>
+		<a href="<?php echo $v['titleurl']?>" class="tit"><?php echo $v['ftitle']?$v['ftitle']:$v['title']?></a>
+	</li><?php
+}
+?>
+</ul>
+	</div>
+</div>
+
+
+
+<div class="box1 wbg p05em">
+	<div class="box1tit"><h3>相关资讯</h3></div>
+	<div class="newslist4 p05em">
+<ul class="clearfix">
+<?php
+foreach($info['xiangguan'] as $k=>$v){
+	?>
+	<li>><a href="<?=$v['titleurl']?>" class="tit"><?=$v['title']?></a></li>
+<?php
+}?>
+</ul>
+	</div>
+</div>
+
+
+
+</div>
+</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{/block}
+{block name="files"}
+<link rel="stylesheet" type="text/css" href="/files/pinglun.css" />
+{/block}

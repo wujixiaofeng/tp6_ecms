@@ -1,0 +1,82 @@
+{extend name="base/base2"}
+{block name="body"}
+<?php 
+$newstext=$info['html'];
+$videoid=videoid($newstext);?>
+<div class="videodiv">
+	<div class="wp clearfix">
+		<div class="newsinfo2 clearfix">
+			<h1><?php echo $info[title]?></h1>
+			<div class="fr">
+				<a class="a nextinfo" href="<?php echo $nextinfo[titleurl]?>"><span class="icon"></span><span>下一视频</span></a>
+				<a class="a tosaypl" href="#tosaypl"><span class="icon"></span><span>评论(<script src="/e/public/ViewClick/?classid=<?php echo $classid?>&id=<?php echo $id?>&down=2"></script>)</span></a>
+				<a class="a share" href="javascript:void(0);"><span class="icon"></span><span>分享到</span><span class="sanjiao"></span></a>
+				<div class="bdsharebuttonbox bdsharebuttonbox2">
+					<a title="分享到QQ空间" class="bds_qzone" href="javascript:void(0);" data-cmd="qzone"></a>
+					<a title="分享给QQ好友" class="bds_sqq" href="javascript:void(0);" data-cmd="sqq"></a>
+					<a title="分享到新浪微博" class="bds_tsina" href="javascript:void(0);" data-cmd="tsina"></a>
+					<a title="分享到微信" class="bds_weixin" href="javascript:void(0);" data-cmd="weixin"></a>
+				</div>
+			</div>
+		</div>
+		<div class="videocont">
+			<?php if($videoid){?>
+				<iframe width="900" height="600" src="http://player.youku.com/embed/<?php echo $videoid?>" frameborder="0" allowfullscreen="true"></iframe>
+			<?php }else{?>
+				<?php echo $newstext;?>
+			<?php }?>
+		</div>
+		<div class="smalltext"><div class="tips">视频介绍：</div><div class="text"><?php echo $info[smalltext]?></div></div>
+	</div>
+</div>
+	<div class="authorinfo2">
+		<div class="wp">
+			<a href="/zuozhe<?php echo $info[ismember]?1:'';?>-<?php echo $info[userid];?>.html" class="authoravatar"><img src="<?php echo user_avatar($info[userid],$id,!$info[ismember])?>" /></a>
+			<a href="/zuozhe<?php echo $info[ismember]?1:'';?>-<?php echo $info[userid];?>.html" class="authorname"><?php echo $info[username]?></a>
+			<div class="date"><?php echo $info[newstime]?></div>
+			
+			<a href="javascript:zan3('<?php echo $classid?>','<?php echo $id?>');" class="zan"></a>
+			<a href="javascript:fav('<?php echo $classid?>','<?php echo $id?>');" class="fav"></a>
+			<script>
+				zan3('<?php echo $classid?>','<?php echo $id?>','checkzan');
+				fav('<?php echo $classid?>','<?php echo $id?>','check');
+			</script>
+		</div>
+	</div>
+	<div class="newslist5">
+		<div class="wp">
+			<div class="listtitle" align="center"><h3>推荐视频</h3></div>
+			<ul class="clearfix">
+				<?php
+				foreach($tuijianshipin as $k=>$v){
+					?>
+						<li>
+							<a href="<?php echo $v[titleurl]?>" class="img"><img src="<?php echo $v[titlepic]?>" alt="<?php echo $v[title]?>" /></a>
+							<a href="<?php echo $v[titleurl]?>"><?php echo $v[title]?></a>
+						</li>
+					<?php
+				}?>
+			</ul>
+		</div>
+	</div>
+	<div class="cont2 clearfix">
+		<div class="wp">
+			<div class="mainleft">
+				<div id="pl"></div><script>pl(<?php echo $classid?>,<?php echo $id?>);</script>
+			</div>
+			<div class="mainright">
+				{include file="news/shenduhaowen"}
+			</div>
+		</div>
+	</div>
+{/block}
+{block name="script"}
+<script>var cnzzinfo={category:"<?php echo $class_r[$classid]['classname'];?>",label:"<?php echo $info['title'];?>"}</script>
+{/block}
+{block name="files"}
+<script src="/skin/pai3/js/pinglun.js"></script>
+<script type="text/javascript" src="/e/data/js/ajax.js"></script>
+<link href="/skin/dir2/css/newsshow.css" rel="stylesheet" type="text/css" />
+<link href="/skin/dir2/css/video.css" rel="stylesheet" type="text/css" />
+<link href="/skin/dir2/css/pinglun.css" rel="stylesheet" type="text/css" />
+{/block}

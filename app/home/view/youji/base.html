@@ -1,0 +1,19 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	{include file="public/head"}
+	<link href="/skin/pai3/css/youji.css" rel="stylesheet" type="text/css" />
+	<link href="/skin/dir2/youji/xcConfirm/css/xcConfirm.css" rel="stylesheet" type="text/css" />
+	<script src="/skin/dir2/js/jquery.js"></script>
+	<script src="/skin/dir2/youji/xcConfirm/js/xcConfirm.js"></script>
+	<script src="/skin/pai3/js/youji.js"></script>
+	{block name="files"}{/block}
+	{block name="style"}{/block}
+	{block name="script"}{/block}
+</head>
+<body<?php echo $bodyClassName?' class="'.$bodyClassName.'"':''?>>
+	{include file="youji/header"}
+	{block name="body"}{/block}
+	{include file="public/footer"}
+</body>
+</html>

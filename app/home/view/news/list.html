@@ -1,0 +1,47 @@
+{extend name="base/base"}
+{block name="body"}
+{include file="public/header1"}
+<div>
+	<div class="newstop">
+    	<div class="wp">
+			<div class="mainleft">
+				<div class="topclass">
+					<h1><?php echo $class_r[$classid]['classname']?></h1></div>
+				<a class="toptitle" target="_blank" href="<?php echo $onenews[titleurl]?>"><?php echo $onenews[title]?></a>
+				<div class="topsmalltext"><?php echo tp_subtext($onenews[smalltext],150);?></div>
+			</div>
+        </div>
+    </div>
+	<script>changetopimg("<?php echo $classid?>","<?php echo $page%20?>");</script>
+	<div class="wp clearfix">
+		<div class="mainleft posr">
+			<div class="whiteleft posa"></div>
+			<ul>
+				<?php
+				foreach($list as $k=>$v){
+					?>
+						<li class="li clearfix">
+							<a class="fl img" href="<?php echo $v[titleurl]?>" target="_blank"><img src="<?php echo $v[titlepic]?>" alt="<?php echo $v[title]?>" /></a>
+							<div class="fr">
+								<a href="<?php echo $v[titleurl]?>" class="title" target="_blank"><?php echo $v[title]?></a>
+								<div class="smalltext"><?php echo subtext($v[smalltext],150);?></div>
+								<div class="rightbottom clearfix">
+									<a href="<?php echo $v[titleurl]?>" target="_blank">查看全文>></a>
+									<div class="share"></div>
+								</div>
+							</div>
+						</li>
+					<?php
+				}
+				?>
+			</ul>
+			<?php echo $pagehtml;?>
+			<script>handlelifirst();</script>
+		</div>
+		<div class="mainright bordertop">{include file="news/listright"}</div>
+	</div>
+</div>
+{/block}
+{block name="files"}
+<link href="/skin/pai3/css/newslist.css" rel="stylesheet" type="text/css" />
+{/block}

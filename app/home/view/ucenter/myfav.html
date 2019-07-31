@@ -1,0 +1,100 @@
+{extend name="base/base1"}
+{block name="body"}
+<div class="wp mt20 mb20 clearfix">
+	<div class="userleft">
+		{include file="ucenter/menu"}
+	</div>
+	<div class="userright">
+	<div class="righttitle1"><?php echo $pagetitle;?></div>
+		<div class="listmenu3 clearfix">
+			<ul class="clearfix">
+				<li<?php if(request()->action()=='myfav'){?> class="cur"<?php }?>><a href="<?php echo url('ucenter/myfav')?>">我的收藏</a></li>
+				<li<?php if(request()->action()=='myzan'){?> class="cur"<?php }?>><a href="<?php echo url('ucenter/myzan')?>">我的点赞</a></li>
+			</ul>
+		</div>
+		<div>
+		<form id="form1">
+			<ul class="newslist" id="listul">
+<?php
+$i=0;
+foreach($list as $k=>$v){
+	$i++;?>
+<li class="clearfix" infoid="<?php echo $v['id']?>">
+	<a class="img" href="<?php echo $v['titleurl']?>" target="_blank"><img src="<?php echo $v['img']?>" /></a>
+	<div class="info">
+		<a href="<?php echo $v['titleurl']?>" class="tit" target="_blank"><?php echo $v[title]?></a>
+		<div class="info1">
+			<input type="checkbox" name="id[]" value="<?php echo $v['classid']?>|<?php echo $v['id']?>" class="infocheck" />
+			<?php if(request()->action()=='myfav'){?><a href="javascript:delmyfav(<?php echo $v['classid']?>,<?php echo $v[id]?>);">取消收藏</a><?php }else{?><a href="javascript:delmyzan(<?php echo $v['classid']?>,<?php echo $v[id]?>);">取消点赞</a><?php }?>
+			<span><?php echo $v['addtime'];?></span>
+		</div>
+		<div class="desc"><?php echo subtext($v[smalltext],200)?></div>
+	</div>
+</li>
+	<?php
+}
+if($i==0)echo "<div class=\"nors\">没有记录</div>";
+?>
+			</ul>
+			<div class="clearfix">
+				<div class="fl"><label class="checkalllabel"><input type="checkbox" class="checkall" />全选</label></div>
+				<div class="fr"><input type="button" class="layui-btn layui-btn-small layui-btn-sm" value="<?php if(request()->action()=='myfav'){?>取消收藏<?php }else{?>取消点赞<?php }?>" /></div>
+			</div>
+		</form>
+		<?php echo $pagehtml;?>
+		</div>
+	</div>
+</div>
+{/block}
+{block name="files"}{/block}
+{block name="script"}
+<script>
+var action='<?php echo request()->action();?>';
+$(document).ready(function(){
+	$('input[value="取消收藏"],input[value="取消点赞"]').click(function(e){
+		if($('#form1').find(".infocheck:checked").length==0){
+			layer.msg('请先选择信息！',{icon:5,shift:6});
+			return false;
+		}
+		layer.confirm('是否删除这些信息？',{icon:3,title:'提示'},function(index){
+			var formdata=$('#form1').serialize();
+			formdata+='&t='+Math.random();
+			$.get('/ucenter/del'+action+'.html',formdata,function(data){
+				if(data.ok){
+					layer.msg(data.msg,{icon:1,end:function(){
+						$('#form1').find(".infocheck:checked").each(function(index,element){
+							var id=$(this).val().split('|').pop();
+							delli(id);
+						});
+					}});
+				}else{
+					layer.msg(data.msg,{icon:5,shift:6,end:function(){location.reload();}});
+				}
+			},'json');
+		});
+	});
+});
+function delli(id){
+	$("li[infoid='"+id+"']").remove();
+	if($('#listul').find('li').length==0){
+		location.reload();//pagej1();
+	}
+}
+function delmyfav(classid,id){
+	layer.confirm('是否取消此收藏？',{icon:3,title:'取消收藏'},function(index){
+		$.get("<?php echo url('/ucenter/delmyfav');?>",{classid:classid,id:id,t:Math.random()},function(res){
+			showmsg(res.msg,function(){if(res.ok)delli(id);},res.ok);
+		},'json');
+		layer.close(index);
+	},function(index){layer.close(index);});
+}
+function delmyzan(classid,id){
+	layer.confirm('是否取消点赞？',{icon:3,title:'取消点赞'},function(index){
+		$.get("<?php echo url('/ucenter/delmyzan');?>",{classid:classid,id:id,t:Math.random()},function(res){
+			showmsg(res.msg,function(){if(res.ok)delli(id);},res.ok);
+		},'json');
+		layer.close(index);
+	},function(index){layer.close(index);});
+}
+</script>
+{/block}

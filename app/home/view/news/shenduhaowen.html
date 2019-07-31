@@ -1,0 +1,11 @@
+<div class="newslist2">
+	<div class="title"><h3>深度好文</h3></div>
+	<ul>
+		<?php 
+		foreach($shenduhaowen as $k=>$v){
+			?>
+				<li><a href="<?php echo $v['titleurl']?>" title="<?php echo $v['title']?>"><img src="<?php echo $v['focusImg']?>" alt="<?php echo $v['title']?>" /></a></li>
+			<?php
+		}?>
+	</ul>
+</div>

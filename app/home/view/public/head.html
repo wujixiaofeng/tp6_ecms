@@ -1,0 +1,14 @@
+<meta charset="gb2312">
+<title><?php if($pagetitle){echo $pagetitle.'_';}?>domain智能生活网</title>
+<?php if($pagekeywords){?><meta name="keywords" content="<?php echo $pagekeywords?>" /><?php }?>
+<?php if($pagedesc){?><meta name="description" content="<?php echo $pagedesc?>" /><?php }?>
+<meta name="viewport" content="width=1200px" />
+<link href="/skin/pai3/css/style.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="/skin/dir2/js/layui/css/layui.css">
+<script src="/skin/dir2/js/jquery.js"></script>
+<script src="/skin/dir2/js/jquery.cookie.js"></script>
+<script src="/skin/dir2/js/layui/layui.js"></script>
+<script src="/skin/pai3/js/common.js"></script>
+<?php if(request()->controller()=='Ucenter'){?>
+<script src="/skin/pai3/js/ucenter.js"></script>
+<link href="/skin/pai3/css/ucenter.css" rel="stylesheet" type="text/css" /><?php }?>

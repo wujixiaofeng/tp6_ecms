@@ -1,0 +1,80 @@
+{extend name="base/base3"}
+{block name="body"}
+
+	<div class="div1">
+		<form method="post" name="regform" id="form1">
+			<div class="posr input1"><input type="text" name="username" id="username" placeholder="用户名" /></div>
+			<div class="posr input1"><input type="text" name="email" id="email" placeholder="电子邮箱" /></div>
+			<div class="posr input1"><input type="password" name="password" id="password" placeholder="密码" /></div>
+			<div class="posr input1"><input type="password" name="repassword" id="repassword" placeholder="重复密码" /></div>
+			<div class="checkinput clearfix">
+				<div class="label"><input type="checkbox" value="315360000" name="tiaokuan" id="tiaokuan" checked /><div><label for="tiaokuan">我接受</label> <a href="<?=ma("passport","tiaokuan")?>" target="_blank">网站服务协议</a></div></div>
+				<a class="fr" href="/login.html">已有账号？立即登录</a>
+			</div>
+			<input type="hidden" name="ispassport" value="1" />
+			<input type="submit" value="注册" id="button" />
+		</form>
+	</div>
+	<div class="connectbtn">
+		<div class="div2">
+			<h2>您还可以使用以下账号直接登录：</h2>
+			<ul class="clearfix">
+				<li class="sina"><a href="javascript:void(0);" href1="/e/memberconnect/?apptype=sina" target="_top" title="微博登录"></a></li>
+				<li class="qq"><a href="javascript:void(0);" href1="/e/memberconnect/?apptype=qq" target="_top" title="QQ登录"></a></li>
+				<li class="weixin"><a href="javascript:void(0);" href1="/e/memberconnect/?apptype=weixin" target="_top" title="微信登录"></a></li>
+			</ul>
+		</div>
+	</div>
+{/block}
+{block name="files"}
+<link href="/skin/pai3/css/passport.css" rel="stylesheet" type="text/css" />
+{/block}
+{block name="script"}
+<script>
+top.window.passportbox.show().sizeto({width:550,height:620});
+top.window.passportbox.title("注册账号");
+$(function(){
+	$("#form1").submit(function(){
+		var self = $(this);
+		if(!self.find('input[name="username"]').val()){
+			errmsg('请填写用户名！');
+			return false;
+		}
+		if(!isemail(self.find('input[name="email"]').val())){
+			errmsg('请填写正确的电子邮箱！');
+			return false;
+		}
+		if(!self.find('input[name="password"]').val()){
+			errmsg('请填写密码！');
+			return false;
+		}
+		if(self.find('input[name="password"]').val()!=self.find('input[name="repassword"]').val()){
+			errmsg('重复密码不正确！');
+			return false;
+		}
+		
+		$.post(self.attr("action"), self.serialize(), success, "json");
+		return false;
+
+		function success(data){
+			if(data.ok){
+				if(data.uc){
+					var exp=/(http\:\/\/.*?)\"{1}/ig;
+					var jsurl;
+					while((jsurl=exp.exec(data.uc))!=null){
+						//$.getScript(result);
+						//$.get(result);
+						$('<img/>').attr('src',jsurl);
+					}
+				}
+				okmsg(data.msg,function(){
+					top.location=data.goto;
+				});
+			} else {
+				errmsg(data.msg);
+			}
+		}
+	});
+});
+</script>
+{/block}

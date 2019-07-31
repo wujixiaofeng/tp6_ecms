@@ -1,0 +1,29 @@
+{extend name="base/base"}
+{block name="body"}
+<div class="global ptb5">
+<div class="jizhe jizhe2 box1 clearfix">
+<div class="title">×÷Õß</div>
+<ul class="clearfix">
+<?php
+foreach($list as $k=>$v){
+?>
+<li>
+	<div class="info1">
+		<a href="/editor-<?php echo $v['userid']?>.html" class="avatar"><img src="<?php echo user_avatar($v['userid'],0,1)?>" /></a>
+		<a href="/editor-<?php echo $v['userid']?>.html" class="username"><?php echo $v['username']?></a>
+	</div>
+	<div class="info2">
+		<div class="jianjie"><?php echo tp_subtext($v['smalltext'],50,'...')?></div>
+		<div class="num"><div class="count"><?php echo $v['count']?><br>ÎÄÕÂ</div><div class="pv"><?php echo $v['pv']?><br>ä¯ÀÀ</div></div>
+	</div>
+</li>
+<?php
+}
+?>
+</ul>
+<?php echo $pagehtml;?>
+</div>
+</div>
+{/block}
+{block name="files"}{/block}
+{block name="script"}{/block}

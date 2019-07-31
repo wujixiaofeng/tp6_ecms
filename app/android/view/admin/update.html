@@ -1,0 +1,80 @@
+{extend name="base/base"}
+{block name="body"}
+<form id="addform" action="<?php echo safe_action();?>" method="post" enctype="multipart/form-data" target="ifr1">
+	<table width="100%" align="center" class="table1">
+		<tr>
+			<th align="right" width="200">版本号：</th>
+			<td><input type="text" name="vercode" value="{$info['vercode']}" /></td>
+		</tr>
+		<tr>
+			<th align="right">版本名称：</th>
+			<td><input type="text" name="vername" value="{$info['vername']}" /></td>
+		</tr>
+		<tr>
+			<th align="right">强制更新：</th>
+			<td>
+				<input type="text" name="force" value="{$info['force']}" />
+				<br>ver表示用户app版本号 sdk表示用户手机系统版本号
+				<br>ver&lt;4&amp;sdk&gt;=3表示用户app版本号小于4并且用户手机系统版本号大于等于3
+				<br>sdk=4|ver&lt;=3表示用户手机系统版本号等于4或小于等于3用户app版本号
+				<br>可以与括号组合使用。满足条件为强制更新。
+			</td>
+		</tr>
+		<tr>
+			<th align="right">升级需要的最小版本号：</th>
+			<td><input type="text" name="mincode" value="{$info['mincode']?$info['mincode']:($mincode>0?$mincode:'')}" /></td>
+		</tr>
+		<tr>
+			<th align="right">上传APK：</th>
+			<td>
+				<div class="inputfile"><input type="file" name="file1" accept=".apk" /></div>
+				<label><input type="checkbox" name="copy" value="1" <?php if(!$info){?> checked<?php }?>/>替换默认版本文件</label>
+			</td>
+		</tr>
+		<tr>
+			<th align="right">更新说明：</th>
+			<td><textarea name="info">{$info['info']}</textarea></td>
+		</tr>
+		<tr>
+			<th></th>
+			<td><input type="submit" value="提交" /></td>
+		</tr>
+	</table>
+</form>
+<iframe name="ifr1" class="size0"></iframe>
+{/block}
+{block name="script"}
+<script>
+$(document).ready(function(){
+	$('input[name="file1"]').change(function(){
+		var $this=$(this);
+		$this.parent().addClass('selected');
+	});
+	$('#addform').submit(function(){
+		var self=$(this);
+		if(!self.find('[name="vercode"]').val()){
+			self.find('[name="vercode"]').focus();
+			errmsg('请填写版本号！');
+			return false;
+		}
+		if(!self.find('[name="vername"]').val()){
+			self.find('[name="vername"]').focus();
+			errmsg('请填写版本名称！');
+			return false;
+		}
+		<?php if(!$info){?>
+		if(!self.find('[name="file1"]').val()){
+			errmsg('请选择APK文件！');
+			return false;
+		}
+		<?php }?>
+		if(!self.find('[name="info"]').val()){
+			self.find('[name="info"]').focus();
+			errmsg('请填写更新说明！');
+			return false;
+		}
+		return true;
+	});
+});
+</script>
+{/block}

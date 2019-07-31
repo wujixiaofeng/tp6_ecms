@@ -1,0 +1,105 @@
+{extend name="base/base"}
+{block name="body"}
+{include file="ucenter/menu"}
+<div class="global">
+<form id="form1">
+	<ul class="news">
+<?php
+$i=0;
+foreach($list as $k=>$v){
+$i++;?>
+<li class="clearfix">
+	<a class="img" href="<?php echo $v[titleurl]?>" target="_blank"><img src="<?php echo $v[img]?>" /></a>
+	<div class="lir">
+		<a href="<?php echo $v[titleurl]?>" class="tit" target="_blank"><?php echo $v[title]?></a>
+		<span><?php echo tp_subtext($v[smalltext],55)?></span>
+		<div class="infob clearfix">
+			<input type="checkbox" name="id[]" value="<?php echo $v['classid']?>|<?php echo $v['id']?>" class="infocheck fr" />
+			<?php if(request()->action()=='myfav'){?><a href="javascript:delmyfav(<?php echo $v['classid']?>,<?php echo $v[id]?>);" class="fr">取消收藏</a><?php }else{?><a href="javascript:delmyzan(<?php echo $v['classid']?>,<?php echo $v[id]?>);" class="fr">取消点赞</a><?php }?>
+			<?php echo substr($v['addtime'],0,10)?>
+		</div>
+	</div>
+</li>
+<?php
+}
+if($i==0)echo "<div class=\"nors\">暂无记录！</div>";
+?>
+	</ul>
+	<div class="btns clearfix">
+		<div class="fl"><label class="checkalllabel"><input type="checkbox" class="checkall" />全选</label></div>
+		<div class="fr"><input type="button" class="submitbtn" value="<?php if(request()->action()=='myfav'){?>取消收藏<?php }else{?>取消点赞<?php }?>" /></div>
+	</div>
+</form>
+<div class="page2"><?php echo $pagehtml;?></div>
+</div>
+{/block}
+{block name="style"}
+<style>
+form{width:100%;}
+.submitbtn{padding:0.2em; border:none; border-radius:0.2em; background:#0099ff; color:#fff;}
+.btns{margin:0.5em;}
+.btns .checkall{float:left; width:1em; height:1em; margin-top:0.1em; margin-bottom:0.1em;}
+.infocheck{width:1em; height:1em; margin-left:0.5em; margin-top:0.1em; margin-bottom:0.1em;}
+</style>
+{/block}
+{block name="files"}
+<link href="/css/ucenter.css" rel="stylesheet" type="text/css" />
+{/block}
+{block name="script"}
+<script>
+$(document).ready(function(e){
+	$('.checkall').click(function(){
+		if(this.checked){
+			$(this.form).find(".infocheck").not('.checkall').each(function(){this.checked=true;});
+		}else{
+			$(this.form).find(".infocheck").not('.checkall').each(function(){this.checked=false;});
+		}
+	});
+});
+var action='<?php echo request()->action();?>';
+$(document).ready(function(){
+	$('input[value="取消收藏"],input[value="取消点赞"]').click(function(e){
+		if($('#form1').find(".infocheck:checked").length==0){
+			errmsg('请先选择信息！');
+			return false;
+		}
+		ConfirmBox({title:'提示信息',text:'是否删除这些信息？',ok:function(){
+			var formdata=$('#form1').serialize();
+			formdata+='&t='+Math.random();
+			$.get('/ucenter/del'+action+'.html',formdata,function(data){
+				if(data.ok){
+					okmsg(data.msg,function(){
+						$('#form1').find(".infocheck:checked").each(function(index,element){
+							var id=$(this).val().split('|').pop();
+							delli(id);
+						});
+					});
+				}else{
+					errmsg(data.msg);
+				}
+			},'json');
+		}});
+	});
+});
+function delli(id){
+	$("li[infoid='"+id+"']").remove();
+	if($('#listul').find('li').length==0){
+		location.reload();//pagej1();
+	}
+}
+function delmyfav(classid,id){
+	ConfirmBox({title:'提示信息',text:'是否取消此收藏？',ok:function(){
+		$.get("<?php echo url('/ucenter/delmyfav');?>",{classid:classid,id:id,t:Math.random()},function(res){
+			showmsg(res.msg,function(){if(res.ok)delli(id);},res.ok);
+		},'json');
+	}});
+}
+function delmyzan(classid,id){
+	ConfirmBox({title:'提示信息',text:'是否取消此点赞？',ok:function(){
+		$.get("<?php echo url('/ucenter/delmyzan');?>",{classid:classid,id:id,t:Math.random()},function(res){
+			showmsg(res.msg,function(){if(res.ok)delli(id);},res.ok);
+		},'json');
+	}});
+}
+</script>
+{/block}

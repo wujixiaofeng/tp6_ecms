@@ -1,0 +1,28 @@
+{extend name="base/base1"}
+{block name="body"}
+<script>$('a[href="/youji/"]').parent().addClass('cur');</script>
+<div class="wp wbg mt30">
+	<div class="pd30">
+		<div align="center" class="textdesc"><img src="/skin/dir2/youji/images/1.gif" /></div>
+		<div class="list">
+			<ul class="clearfix">
+				<?php
+				foreach($list as $k=>$v){
+					?>
+					<li>
+						<a href="<?php echo $v['titleurl']?>"><img src="<?php echo $v['titlepic']?>" /></a>
+						<a href="<?php echo $v['titleurl']?>" class="tit"><?php echo $v['title']?></a>
+						<div class="info"><?php echo date("Y年m月d日",$v['newstime'])?> <?php echo $v['daycount']?>天 <?php echo $v['imgcount']?>图</div>
+					</li>
+					<?php
+				}
+				?>
+			</ul>
+			<div class="listpage clearfix"><?php echo $pagehtml;?></div>
+		</div>
+	</div>
+</div>
+{/block}
+{block name="files"}
+<link href="/skin/dir2/youji/style2.css" rel="stylesheet" type="text/css" />
+{/block}

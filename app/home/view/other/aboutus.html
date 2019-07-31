@@ -1,0 +1,123 @@
+{extend name="base/base"}
+{block name="body"}
+{include file="public/header4"}
+<div class="cont1">
+	<div class="nav2">
+		<ul class="wp clearfix">
+			<li><a href="#guanyu">关于我们</a></li>
+			<li><a href="#huoban">合作伙伴</a></li>
+			<li><a href="#lianxi">联系我们</a></li>
+			<li><a href="#tuandui">我们的团队</a></li>
+			<li><a href="#jiaru">加入我们</a></li>
+		</ul>
+	</div>
+</div>
+<div class="cont2">
+	<div class="wp">
+		<a name="guanyu"></a>
+		<div class="title1"><h3>关于我们</h3><div class="line"></div></div>
+		<img src="/skin/dir2/images/aboutus/cont2.jpg" class="cont21" />
+		<div class="cont22">
+			<div class="cont221">网站 domain</div>
+			<div class="cont222">专注美好智能生活的报道</div>
+			<div class="cont223">www.domain.com</div>
+		</div>
+		<div class="cont23"></div>
+		<div class="cont24"></div>
+	</div>
+</div>
+<div class="cont3">
+	<div class="wp">
+		<a name="huoban"></a>
+		<div class="title1"><h3>合作伙伴</h3><div class="line"></div></div>
+		<div class="cont31">
+			<ul class="clearfix">
+				<li><img src="/skin/dir2/images/aboutus/huoban/toutiao.png" /></li>
+				<li><img src="/skin/dir2/images/aboutus/huoban/tianji.png" /></li>
+				<li><img src="/skin/dir2/images/aboutus/huoban/kuaibao.png" /></li>
+				<li><img src="/skin/dir2/images/aboutus/huoban/yidianzixun.png" /></li>
+				<li><img src="/skin/dir2/images/aboutus/huoban/sina.png" /></li>
+				<li><img src="/skin/dir2/images/aboutus/huoban/sina2.png" /></li>
+				<li><img src="/skin/dir2/images/aboutus/huoban/sohu.png" /></li>
+				<li><img src="/skin/dir2/images/aboutus/huoban/suning.png" /></li>
+				<li><img src="/skin/dir2/images/aboutus/huoban/jingdong.png" /></li>
+				<li><img src="/skin/dir2/images/aboutus/huoban/baijiahao.png" /></li>
+				<li><img src="/skin/dir2/images/aboutus/huoban/dayuhao.png" /></li>
+				<li><img src="/skin/dir2/images/aboutus/huoban/wangyi.png" /></li>
+			</ul>
+		</div>
+	</div>
+</div>
+<div class="cont4">
+	<a name="lianxi"></a>
+	<div class="cont41"><div class="wp"><div class="title1"><h3>联系我们</h3><div class="line"></div></div></div></div>
+	<div class="wp">
+		<div class="cont42 clearfix">
+			<div class="cont421">
+			</div>
+			<iframe src="/other/map.html" width="760" height="300" frameborder="0"></iframe>
+		</div>
+	</div>
+</div>
+<div class="cont5">
+	<div class="wp">
+		<a name="tuandui"></a>
+		<div class="title1"><h3>我们的团队</h3><div class="line"></div></div>
+		<div class="people" id="tabbox1">
+			<div class="titles"><h2>优秀编辑</h2></div>
+			<div class="conts">
+				<blockquote>
+					<ul class="clearfix">
+						<?php
+							$i=0;
+							foreach($list as $k=>$v){
+								if($i<20 and file_exists(ECMS_PATH."d/adminavatar/$v[userid].jpg")){
+									$i++;?><li><a href="/zuozhe-<?php echo $v[userid]?>.html"><img src="/d/adminavatar/<?=$v[userid]?>.jpg"><br><span class="username"><?=$v[username]?></span></a><br><span class="span2">网站优秀编辑</span></li><?php
+}?>
+						<?php }?>
+					</ul>
+				</blockquote>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="cont6">
+	<div class="wp">
+		<a name="jiaru"></a>
+		<div class="title1"><h3>加入我们</h3><div class="line"></div></div>
+		<div class="cont61">
+			<img src="/skin/dir2/images/aboutus/neijing/1.jpg" />
+			<img src="/skin/dir2/images/aboutus/neijing/2.jpg" />
+			<img src="/skin/dir2/images/aboutus/neijing/3.jpg" />
+			<img src="/skin/dir2/images/aboutus/neijing/4.jpg" />
+			<img src="/skin/dir2/images/aboutus/neijing/5.jpg" />
+		</div>
+		<div class="cont62">
+还在混日子？还在忍老板？还在不爽工资？还在嫌弃猪一样的队友？……<br>
+与其期待奇迹，不如来点实际！干件大事，炒掉老板来网站！网站虚位以待……<br>
+别磨叽 ,赶紧联系我们<br>
+有时间发呆还不如来赚钱<br>
+升职加薪、当上总经理、出任CEO、迎娶白富美、走上人生巅峰，想想还有点小激动~
+		</div>
+	</div>
+</div>
+{/block}
+{block name="files"}
+<link href="/skin/dir2/css/aboutus.css" rel="stylesheet" type="text/css" />
+{/block}
+{block name="script"}
+<script>
+$(function(){
+	$("a[href='#guanyu']").click(function(e){$("html,body").animate({scrollTop:$("a[name='guanyu']").offset().top});return false;});
+	$("a[href='#huoban']").click(function(e){$("html,body").animate({scrollTop:$("a[name='huoban']").offset().top});return false;});
+	$("a[href='#lianxi']").click(function(e){$("html,body").animate({scrollTop:$("a[name='lianxi']").offset().top});return false;});
+	$("a[href='#tuandui']").click(function(e){$("html,body").animate({scrollTop:$("a[name='tuandui']").offset().top});return false;});
+	$("a[href='#jiaru']").click(function(e){$("html,body").animate({scrollTop:$("a[name='jiaru']").offset().top});return false;});
+	$("a[href='/aboutus.php#guanyu']").click(function(e){$("html,body").animate({scrollTop:$("a[name='guanyu']").offset().top});return false;});
+	$("a[href='/aboutus.php#huoban']").click(function(e){$("html,body").animate({scrollTop:$("a[name='huoban']").offset().top});return false;});
+	$("a[href='/aboutus.php#lianxi']").click(function(e){$("html,body").animate({scrollTop:$("a[name='lianxi']").offset().top});return false;});
+	$("a[href='/aboutus.php#tuandui']").click(function(e){$("html,body").animate({scrollTop:$("a[name='tuandui']").offset().top});return false;});
+	$("a[href='/aboutus.php#jiaru']").click(function(e){$("html,body").animate({scrollTop:$("a[name='jiaru']").offset().top});return false;});
+});
+</script>
+{/block}

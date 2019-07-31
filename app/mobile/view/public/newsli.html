@@ -1,0 +1,18 @@
+<?php
+if($bqi==1){
+$v['titleurl']=str_replace(array("http://www.domain.com","http://cnpai.com"),"",$v['titleurl']);
+$v['newstime']=date("Y-m-d",$v['newstime']);?>
+<li class="clearfix">
+	<a href="<?php echo $v['titleurl']?>" class="img"><img src="<?php echo $v['titlepic']?>" /></a>
+	<div class="lir">
+		<a href="<?php echo $v['titleurl']?>" class="tit"><?php echo $v['ftitle']?$v['ftitle']:$v['title']?></a>
+		<span><?php echo $v['smalltext']?></span>
+		<div class="infob">
+			<div class="time"><?php echo $v['newstime']?></div>
+			<div class="zuozhe">×÷Õß£º<?php echo $v['writer']?$v['writer']:$v['username']?></div>
+		</div>
+	</div>
+</li>
+<?php }else{ ?>
+<li class="lidian"><a href="<?php echo $v['titleurl']?>" class="tit"><?php echo $v['title']?></a></li>
+<?php }?>

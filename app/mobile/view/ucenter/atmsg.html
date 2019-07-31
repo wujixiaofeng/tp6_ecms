@@ -1,0 +1,110 @@
+{extend name="base/base"}
+{block name="body"}
+{include file="ucenter/menu"}
+<div class="global msg">
+<div id="plformdiv">
+	<form name="repl_--repid--" method="post" action="/pinglun/submit" onsubmit="return checkpinglun(this)" class="clearfix" target="ifr">
+		<div class="textarea"><textarea name="saytext" placeholder="请输入回复内容">--atuser--</textarea></div>
+		<input name="atplid" type="hidden" value="--atplid--">
+		<input name="id" type="hidden" value="--id--">
+		<input name="classid" type="hidden" value="--classid--">
+		<input name="enews" type="hidden" value="AddPl">
+		<input name="repid" type="hidden" id="repid" value="--repid--">
+		<input name="atuserid" type="hidden" id="atuserid" value="--atuserid--">
+		<input name="nomember" type="hidden" value="1">
+		<input name="in_ifr" type="hidden" value="1">
+		<?php if($guandian){?><input name="guandian" type="hidden" value="<?php echo $guandian?>"><?php }?>
+		<?php if($ztid){?><input name="doaction" type="hidden" value="dozt"><?php }?>
+		<div class="formbottom">
+			<input class="fr" type="submit" value="提交" />
+		</div>
+	</form>
+</div>
+<div class="pinglun2">
+<ul class="atme">
+<?php
+foreach($atlist as $k=>$v){
+	$includelink=" onclick=\"huifu2('$r[mid]','$r[classid]','$r[id]','$r[replid]','$r[plid]','$r[from_username]');\"";
+	?>
+	<li class="clearfix" id="mid_<?php echo $v[mid]?>">
+		<div class="atmetop clearfix">
+			<div class="avatar fl"><img src="<?php echo user_avatar($v[from_userid],$v[atplid])?>" /></div>
+			<div class="fl">
+				<div class="username"><?php echo empty($v[from_username])?"匿名":$v[from_username]?></div>
+				<div class="time"><?php echo formattime(strtotime($v[msgtime]))?></div>
+			</div>
+		</div>
+		<div class="plinfo">
+			<div class="msgcont">
+				<?php echo tp_plbiaoqing($v[msgtext])?>
+				<div class="msginfo">
+					<?php if($v['yuanwen']){?><div><span>原文内容：</span><?php echo tp_plbiaoqing($v['yuanwen'])?></div><?php }?>
+					<?php if($v['newstitle']){?><div><span>评论来自：</span><a href="<?php echo $v['titleurl']?>" target="_blank"><?php echo $v['newstitle']?></a></div><?php }?>
+				</div>
+			</div>
+			<!--<?php if($v['yuanwen'] and $v['titleurl']){?><a class="bottombtn" href="javascript:void(0);"<?php echo $includelink?>>回复</a><?php }?>-->
+			<a class="bottombtn" href="javascript:delatmsg(<?php echo $v[mid]?>);">删除</a>
+			<input class="delatmsgsel" type="checkbox" name="id[]" value="<?php echo $v[mid]?>" />
+		</div>
+		<div class="huifudiv" id="huifudiv<?php echo $v[mid]?>"></div>
+	</li>
+	<?php
+}
+?>
+</ul>
+<div class="title3 attitle3">
+	<label><input type="checkbox" value="1" name="chkall" onClick="CheckAll();" />全选</label>
+	<input type="button" value="删除" onClick="delatmsg();" />
+</div>
+<div class="page2"><?php echo $pagehtml;?></div>
+</div>
+</div>
+{/block}
+{block name="files"}
+<link href="/css/ucenter.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="/files/pinglun.css" />
+{/block}
+{block name="script"}
+<script>
+function CheckAll(){
+	var ischecked=$('input[name="chkall"]').is(":checked");
+	$('.delatmsgsel').each(function(){
+		if(ischecked){
+			$(this)[0].checked=true;
+		}else{
+			$(this)[0].checked=false;
+		}
+	});
+}
+function delatmsg(mid){
+	if(!mid){
+		if($('.delatmsgsel:checked').length==0){
+			errmsg('请先选择消息！');
+			return false;
+		}
+		var mid=[];
+		$('.delatmsgsel:checked').each(function(){
+			mid.push($(this).val());
+		});
+	}
+	ConfirmBox({text:'确定删除吗？',title:'操作确认',ok:function(){
+		$.post("<?php echo url('/ucenter/handle')?>",{submit:'del',tbtype:'at',mid:mid,t:Math.random()},function(data){
+			showmsg(data.msg,function(){
+				if(data.ok){
+					if(typeof mid=='object'){
+						for(var i in mid){
+							$('#mid_'+mid[i]).remove();
+						}
+					}else{
+						$('#mid_'+mid).remove();
+					}
+					if($('ul.atme li').length==0){
+						location.reload();//pagej1();
+					}
+				}
+			},data.ok);
+		},'json');
+	}});
+}
+</script>
+{/block}

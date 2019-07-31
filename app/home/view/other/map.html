@@ -1,0 +1,37 @@
+<!DOCTYPE html>  
+<html>  
+<head>  
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />  
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />  
+<style type="text/css">  
+body,html,#l-map{width: 100%;height: 100%;overflow: hidden;margin:0;}  
+</style>  
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.5&ak=phE08cN6vKceFAF7eUx4Me4U"></script> 
+<title>显示地图</title>  
+</head>  
+<body>  
+<div id="l-map"></div>  
+</body>
+</html>  
+<script type="text/javascript">  
+var map = new BMap.Map("l-map");
+var point = new BMap.Point(114.554548,38.048632);
+map.centerAndZoom(point,15);
+map.enableDragging();
+
+var marker = new BMap.Marker(new BMap.Point(124.554548,32.048632));  //创建标注
+map.addOverlay(marker);// 将标注添加到地图中
+var opts = {
+	width : 200,// 信息窗口宽度
+	height: navigator.userAgent.toLowerCase().indexOf('webkit')>-1?67:62,// 信息窗口高度
+	title : "",// 信息窗口标题
+	enableAutoPan : true//自动平移
+}
+var infoWindow = new BMap.InfoWindow("",opts);//创建信息窗口对象
+map.openInfoWindow(infoWindow,point);//开启信息窗口
+marker.addEventListener("click",function(){          
+	map.openInfoWindow(infoWindow,point);//开启信息窗口
+});
+map.addControl(new BMap.ScaleControl());//添加比例尺控件
+//map.enableScrollWheelZoom(true);
+</script>

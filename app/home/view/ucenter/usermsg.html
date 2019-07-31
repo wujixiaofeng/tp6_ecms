@@ -1,0 +1,126 @@
+{extend name="base/base1"}
+{block name="body"}
+<div class="wp mt20 mb20 clearfix">
+	<div class="userleft">
+		{include file="ucenter/menu"}
+	</div>
+	<div class="userright xiaoxi">
+		<div class="righttitle1">用户消息</div>
+		{include file="ucenter/msgmenu"}
+
+
+
+<form name="msgform" method="post" id="form1" action="javascript:void(0);">
+	<div class="msg">
+		<div class="title3">
+			<label><input type="checkbox" value="1" name="chkall" onClick="CheckAll(this.form,this);" />全选</label>
+			<input type="submit" name="submit" value="标记为已读" />
+			<input type="submit" name="submit" value="删除" />
+		</div>
+		<ul>
+<?php
+if($rscount>0){
+foreach($userlist as $k=>$v){
+?>
+	<li idvalue="<?php echo $v[mid]?>">
+		<div class="clearfix">
+			<div class="ckinput"><input type="checkbox" name="mid[]" value="<?php echo $v[mid]?>" /></div>
+			<a class="ptmsga clearfix" href="<?php echo url('ucenter/usermsgshow',['userid'=>($v[isfrom]?$v['touid']:$v['fromuid']),'page'=>'last']);?>">
+				<div class="msgicon<?php echo ($v[haveread] or $v['isfrom'])?" haveread":""?>"></div>
+				<div class="msgtitle"><?php echo $v['isfrom']?"发送给[$v[touname]]:":"来自[$v[fromuname]]:"?><span class="smalltext"><?php echo preg_replace("/\<.*?\>/is"," ",$v[text])?></span></div>
+				<div class="msgtime"><?php echo date("Y-m-d",$v[time]);?></div>
+			</a>
+		</div>
+	</li>
+<?php
+}
+}else{
+	?><div class="nors">暂无消息！</div><?php
+}
+?>
+		</ul>
+		<?php if($rscount>1){?>
+		<div class="title3 btitle3">
+			<label><input type="checkbox" value="1" name="chkall2" onClick="CheckAll(this.form,this);" />全选</label>
+			<input type="submit" name="submit" value="标记为已读" />
+			<input type="submit" name="submit" value="删除" />
+		</div>
+		<?php }?>
+		<?php echo $pagehtml;?>
+	</div>
+</form>
+
+
+
+
+
+	</div>
+</div>
+{/block}
+{block name="files"}
+{/block}
+{block name="script"}
+<script>
+$(document).ready(function(){
+	$('#form1 input[type="submit"]').click(function(){
+		if($('.ckinput input:checked').length==0){
+			errmsg('请先选择消息！');
+			return false;
+		}
+		var submit=$(this).val();
+		var res=$('#form1').serializeArray();
+		res.push({name:'submit',value:submit});
+		if(submit=='删除'){
+			layer.confirm('确定删除这些消息吗？',{icon:3,title:'提示信息'},function(index){
+				post();
+				layer.close(index);
+			},function(index){layer.close(index);});
+		}else{
+			post();
+		}
+		function post(){
+			$.post("<?php echo url('/ucenter/userhandle')?>",$.param(res),function(res){
+				if(res.ok){
+					okmsg(res.msg,function(){
+						$('.ckinput input:checked').each(function(){
+							var mid=$(this).val();
+							if(submit=='删除'){
+								$('li[idvalue="'+mid+'"]').remove();
+							}else{
+								$("li[idvalue='"+mid+"']").find(".msgicon i").removeClass("fa-envelope").addClass("fa-envelope-open");
+							}
+							updateHaveMsg();
+						});
+						$('#form1 input:checkbox').each(function(){
+							$(this)[0].checked=false;
+						});
+					});
+				}else{
+					errmsg(res.msg);
+				}
+			},'json');
+		}
+		return false;
+	});
+	$('.msgtext').find('a').each(function(index,element){
+		if($(this).attr('target')!='_blank'){
+			$(this).attr('target','_blank');
+		}
+	});
+});
+function updateHaveMsg(){
+	if(!isNaN($('.userweidu').html())){
+		$('.userweidu').html(parseInt($('.userweidu').html())-1);
+		$('.weidu').html(parseInt($('.weidu').html())-1);
+	}
+	if($('.userweidu').html()=='0')$('.userweidu').remove();
+	if($('.weidu').html()=='0'){
+		$('.weidu').remove();
+		$('.havemsg').remove();
+	}
+}
+function CheckAll(form,chkall){
+	$(form).find(':checkbox').prop('checked',$(chkall).is(':checked'));
+}
+</script>
+{/block}

@@ -1,0 +1,85 @@
+{extend name="base/base1"}
+{block name="body"}
+<div class="wp mt20 clearfix">
+	<div class="userleft">
+		{include file="ucenter/menu"}
+	</div>
+	<div class="userright">
+			<div class="righttitle1">个人资料</div>
+			{include file="ucenter/setmenu"}
+			<form name="userinfoform" method="post" enctype="multipart/form-data" id="form1">
+				<div class="input2 clearfix">
+					<label class="label">真实姓名：</label>
+					<input type="text" class="input" name="truename" id="truename" value="<?php echo $user[truename]?>" />
+				</div>
+				<div class="input2 clearfix">
+					<label class="label">手机号：</label>
+					<input type="text" class="input" name="phone" id="phone" value="<?php echo $user[phone]?>" />
+				</div>
+				<div class="input2 clearfix">
+					<label class="label">QQ号：</label>
+					<input type="text" class="input" name="oicq" id="oicq" value="<?php echo $user[oicq]?>" />
+				</div>
+				<div class="input2 clearfix">
+					<label class="label">支付宝：</label>
+					<input type="text" class="input" name="alipay" id="alipay" value="<?php echo $user[alipay]?>" />
+				</div>
+				<div class="input2 clearfix">
+					<label class="label">银行卡号：</label>
+					<input type="text" class="input" name="bankcard" id="bankcard" value="<?php echo $user[bankcard]?>" />
+				</div>
+				<div class="input2 clearfix">
+					<label class="label">联系地址：</label>
+					<input type="text" class="input" name="address" id="address" value="<?php echo $user[address]?>" />
+				</div>
+				<div class="input2 clearfix">
+					<label class="label">个人简介：</label>
+					<textarea name="saytext" id="saytext"><?php echo $user[saytext]?></textarea>
+				</div>
+
+				<input type="submit" value="修改" class="layui-btn" id="button" />
+			</form>
+	</div>
+</div>
+{/block}
+{block name="files"}
+<script src="/skin/dir2/js/jsupload.js"></script>
+{/block}
+{block name="script"}
+<script>
+$(document).ready(function(e){
+	$("#form1").submit(function(){
+		var self = $(this);
+		if(self.find('[name="phone"]').val()&&!ismobile(self.find('[name="phone"]').val())){
+			errmsg('请填写正确的手机号！');
+			self.find('[name="phone"]').focus();
+			return false;
+		}
+		if(self.find('[name="oicq"]').val()&&!isqq(self.find('[name="oicq"]').val())){
+			errmsg('请填写正确的QQ号！');
+			self.find('[name="oicq"]').focus();
+			return false;
+		}	if(self.find('[name="alipay"]').val()&&!ismobile(self.find('[name="alipay"]').val())&&!isemail(self.find('[name="alipay"]').val())){
+			errmsg('请填写正确的支付宝账号！');
+			self.find('[name="alipay"]').focus();
+			return false;
+		}
+		if(self.find('[name="bankcard"]').val()&&!isbankcard(self.find('[name="bankcard"]').val())){
+			errmsg('请填写正确的银行卡号！');
+			self.find('[name="bankcard"]').focus();
+			return false;
+		}
+		$.post(self.attr("action"), self.serialize(), success, "json");
+		return false;
+
+		function success(res){
+			if(res.ok){
+				okmsg(res.msg,function(){location.reload();});
+			} else {
+				errmsg(res.msg);
+			}
+		}
+	});
+});
+</script>
+{/block}

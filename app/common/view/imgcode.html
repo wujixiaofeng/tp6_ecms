@@ -1,0 +1,8 @@
+<style>
+.imgcodeimg{display:block; width:13em; margin-top:15px;}
+input[name="imgcode"]{width:4em; height:1em; padding:0.5em; border:solid 1px #ddd;}
+</style>
+<div align="center">
+	<img class="imgcodeimg" src="/base/verify?id=1&t=<?php echo md5(microtime())?>" onclick="this.src='/base/verify?id=1&t='+Math.random()" /><br>
+	<input name="imgcode" id="imgcode" type="text" />
+</div>

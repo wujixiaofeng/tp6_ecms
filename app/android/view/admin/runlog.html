@@ -1,0 +1,84 @@
+{extend name="base/base"}
+{block name="body"}
+<?php
+//获取app运行日志类型函数
+function apprunlogtype($type){
+	if($type==0){
+		return "运行";
+	}elseif($type==1){
+		return "登录";
+	}elseif($type==2){
+		return "更新";
+	}
+}
+
+//app运行统计获取用户名函数
+function apprunusername($userid){
+	//初始化静态变量用户名列表函数
+	static $usernames=array();
+	//如果用户id大于0
+	if($userid>0){
+		//如果用户名列表中没有此用户数据
+		if(!$usernames[$userid]){
+			//根据用户id从数据库读取用户名 并赋值到用户名列表
+			$usernames[$userid]=\think\facade\Db::name('Enewsmember')->where('userid',$userid)->value('username');
+		}
+		//返回用户名列表中对应的用户名
+		return $usernames[$userid];
+	}
+	//如果用户id不大于0返回空字符
+	return "";
+}
+?>
+	<table width="100%" align="center" class="table1 yudinglist">
+	<tr><th>ID</th><th>类型</th><th>用户名</th><th>AndoridID</th><th SerialNumber>序列号</th><th>MAC</th><th>品牌</th><th>型号</th><th>版本</th><th>系统版本</th><th>IP</th><th>时间</th><th></th></tr>
+	<?php
+		if($list){
+			foreach($list as $k=>$v){
+				?><tr>
+					<td><?php echo $v[id]?></td>
+					<td><?php echo apprunlogtype($v[logtype])?></td>
+					<td><?php echo apprunusername($v[userid])?></td>
+					<td><?php echo $v[androidid]?></td>
+					<td><?php echo $v[snum]?></td>
+					<td><?php echo $v[mac]?></td>
+					<td><?php echo $v[brand]?></td>
+					<td><?php echo $v[model]?></td>
+					<td><?php echo $v[version]?></td>
+					<td><?php echo ($v[sdk]==0?'':$v[sdk])?></td>
+					<td><?php echo $v[ip]?></td>
+					<td><?php echo date("Y-m-d H:i:s",$v['time'])?></td>
+					<td><?php echo $v[isfirst]==1?"首次运行":""?></td>
+				</tr>
+				<?php
+			}
+			if($pagehtml){
+				?><tr align="left"><td colspan="20"><?php echo $pagehtml;?></th></tr><?php
+			}
+		}else{
+			?><tr align="center"><td colspan="20"><div class="nors">暂无记录！</div></th></tr><?php
+		}
+	?>
+	</table>
+	<script>$('.table1 tr:even').addClass('tr2');</script>
+{/block}
+{block name="header"}
+<form>
+	<input type="hidden" name="s" value="<?php echo cur_s();?>" />
+	类型:
+	<select name="logtype">
+		<option value="">不限制类型</option>
+		<option value="0"<?php echo (input('get.logtype')=='0'?' selected':'')?>>运行</option>
+		<option value="1"<?php echo (input('get.logtype')=='1'?' selected':'')?>>登录</option>
+		<option value="2"<?php echo (input('get.logtype')=='2'?' selected':'')?>>更新</option>
+	</select>
+	关键词:
+	<input type="text" name="keywords" value="<?php echo input('get.keywords')?>" placeholder="" />
+	<input type="submit" value="搜索" />
+	<input type="button" value="清除搜索" />
+</form>
+<script>$('input[value="清除搜索"]').click(function(){location="?s=<?php echo cur_s();?>";});</script>
+{/block}
+{block name="style"}
+	<style>body{font-size:14px;}</style>
+{/block}

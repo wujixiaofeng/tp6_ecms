@@ -1,0 +1,31 @@
+{extend name="base/base"}
+{block name="body"}
+<div class="global">
+<div class="jizhe jizhe2 box1 jizheinfo clearfix">
+<div class="efirst clearfix">
+	<a href="/editor-<?php echo $info['userid']?>.html" class="avatar fl"><img src="<?php echo user_avatar($info['userid'],0,1)?>" /></a>
+	<div class="fr">
+		<a href="/editor-<?php echo $info['userid']?>.html" class="username"><?php echo $info['username']?></a>
+		<div class="jianjie"><?php echo $info['smalltext']?></div>
+		<div class="num"><div class="count"><?php echo $info['count']?><br>ндуб</div><div class="pv"><?php echo $info['pv'];?><br>Д╞юю</div></div>
+	</div>
+</div>
+</div>
+<div class="jizhenews news clearfix">
+<ul>
+<?php
+$bqi=0;
+foreach($list as $k=>$v){
+	?>{include file="public/newsli"}<?php
+}?>
+</ul>
+<?php echo $pagehtml;?>
+</div>
+<script>
+	$(".news li").width($(".news").width()-(parseInt($(".news li:first").css("paddingLeft"))+parseInt($(".news li:first").css("marginLeft")))*2);
+	$(".news li img").width($(".news li").width());
+</script>
+</div>
+{/block}
+{block name="files"}{/block}
+{block name="script"}{/block}

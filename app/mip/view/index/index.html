@@ -1,0 +1,94 @@
+{extend name="base/base"}
+{block name="body"}
+<div class="global">
+{include file="public/nav"}
+
+
+
+<mip-carousel
+    autoplay
+    defer="3000" 
+    layout="responsive" 
+    width="640" 
+    height="320"
+	indicator 
+	buttonController >
+<?php
+foreach($focus as $k=>$v){
+?>
+    <a target="_blank" href="<?php echo $v['titleurl']?>">
+        <mip-img 
+            src="<?php echo $v['focusImg']?>" width="640" height="320">
+        </mip-img>
+        <div class="mip-carousle-subtitle"><?php echo $v[title]?></div>
+    </a>
+<?php
+}?>
+</mip-carousel>
+
+
+
+
+
+
+
+
+
+
+<mip-vd-tabs>
+    <section>
+        <li>新闻推荐</li>
+        <li>热点新闻排行</li>
+    </section>
+    <div class="news">
+
+	<ul>
+<?php
+$bqi=0;
+foreach($tuijian as $k=>$v){
+	$bqi++;
+	?>{include file="public/newsli"}<?php
+}?>
+	</ul>
+	</div>
+    <div class="news">
+
+	<ul>
+<?php
+$bqi=0;
+foreach($redian as $k=>$v){
+	$bqi++;
+	?>{include file="public/newsli"}<?php
+}?>
+	</ul>
+	</div>
+</mip-vd-tabs>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<?php foreach($classlist as $classid=>$list){?>
+<div class="news">
+	<div class="title"><h3><?php echo $class_r[$classid]['classname']?></h3><a href="http://m.domain.com/<?php echo $class_r[$classid]['classpath']?>/" target="_blank">更多</a></div>
+	<ul class="content">
+		{include file="public/newsli2"}
+	</ul>
+</div>
+<?php }?>
+</div>
+{/block}

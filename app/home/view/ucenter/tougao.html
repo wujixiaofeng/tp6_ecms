@@ -1,0 +1,105 @@
+{extend name="base/base1"}
+{block name="body"}
+<div class="wp mt20 mb20 clearfix">
+	<div class="userleft">
+		{include file="ucenter/menu"}
+	</div>
+	<div class="userright">
+	<div class="righttitle1"><?php echo $pagetitle;?></div>
+		<div class="listmenu3 clearfix">
+			<ul class="clearfix">
+				<li<?php if(empty($_GET[a2])){?> class="cur"<?php }?>><a href="<?php echo url('ucenter/'.request()->action())?>">已审核</a></li>
+				<li<?php if(!empty($_GET[a2])){?> class="cur"<?php }?>><a href="<?php echo url('ucenter/'.request()->action(),['a2'=>'view'])?>">审核中</a></li>
+				<?php if(request()->action()=='tougao'){?><li><a href="/news/submit.html" target="_blank">发布投稿</a></li><?php }?>
+				<?php if(request()->action()=='shipin'){?><li><a href="/news/submit.html?classid=25" target="_blank">发布视频</a></li><?php }?>
+				<?php if(request()->action()=='youji'){?><li><a href="/youji/add.html" target="_blank">发布游记</a></li><?php }?>
+			</ul>
+		</div>
+		<div>
+		<form id="form1">
+			<ul class="newslist" id="listul">
+<?php
+$i=0;
+foreach($list as $k=>$v){
+	$i++;?>
+<li class="clearfix" infoid="<?php echo $v['id']?>">
+	<a class="img" href="<?php echo $v['titleurl']?>" target="_blank"><img src="<?php echo $v['img']?>" /></a>
+	<div class="info">
+		<a href="<?php echo $v['titleurl']?>" class="tit" target="_blank"><?php echo $v[title]?></a>
+		<div class="info1">
+			<input type="checkbox" name="infoid[]" value="<?php echo $v['classid']?>|<?php echo $v['id']?>" class="infocheck" />
+			<?php if(request()->action()=='youji'){?>
+				<a href="/youji/edit.html?yjid=<?php echo $v[id]?>" target="_blank">编辑</a>
+			<?php }else{?>
+				<a href="/news/submit.html?classid=<?php echo $v['classid']?>&id=<?php echo $v[id]?>" target="_blank">编辑</a>
+			<?php }?>
+			<a href="javascript:delworks(<?php echo $v['classid']?>,<?php echo $v[id]?>);">删除</a>
+			<span><?php echo $v['newstime'];?></span>
+		</div>
+		<div class="desc"><?php echo subtext($v[smalltext],200)?></div>
+	</div>
+</li>
+	<?php
+}
+if($i==0)echo "<div class=\"nors\">没有记录</div>";
+?>
+			</ul>
+			<table width="100%" border="0" cellspacing="0" cellpadding="0" class="mt10">
+				<tr>
+				  <td align="left">
+					<label class="checkalllabel"><input type="checkbox" class="checkall" />全选</label>
+				  </td>
+				  <td align="right">
+					<input type="button" class="layui-btn layui-btn-small layui-btn-sm" value="删除" />
+				  </td>
+				</tr>
+			</table>
+		</form>
+		<?php echo $pagehtml;?>
+		</div>
+	</div>
+</div>
+{/block}
+{block name="files"}{/block}
+{block name="script"}
+<script>
+$(document).ready(function(){
+	$('input[value="删除"]').click(function(e){
+		if($('#form1').find(".infocheck:checked").length==0){
+			layer.msg('请先选择信息！',{icon:5,shift:6});
+			return false;
+		}
+		layer.confirm('是否删除这些信息？',{icon:3,title:'提示'},function(index){
+			var formdata=$('#form1').serialize();
+			formdata+='&t='+Math.random();
+			$.get("<?php echo url('/ucenter/delnewslist');?>",formdata,function(data){
+				if(data.ok){
+					layer.msg(data.msg,{icon:1,end:function(){
+						$('#form1').find(".infocheck:checked").each(function(index,element){
+							var id=$(this).val().split('|').pop();
+							delli(id);
+						});
+					}});
+				}else{
+					layer.msg(data.msg,{icon:5,shift:6,end:function(){location.reload();}});
+				}
+			},'json');
+		});
+	});
+});
+function delli(id){
+	$("li[infoid='"+id+"']").remove();
+	if($('#listul').find('li').length==0){
+		location.reload();//pagej1();
+	}
+}
+function delworks(classid,id){
+	layer.confirm('是否删除此信息？',{icon:3,title:'删除信息'},function(index){
+		$.get("<?php echo url('/ucenter/delnews');?>",{classid:classid,id:id,t:Math.random()},function(res){
+			showmsg(res.msg,function(){if(res.ok)delli(id);},res.ok);
+		},'json');
+		layer.close(index);
+	},function(index){layer.close(index);});
+}
+</script>
+{/block}

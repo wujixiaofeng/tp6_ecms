@@ -1,0 +1,83 @@
+{extend name="youji/base"}
+{block name="body"}
+<div id="noselect">
+<div class="upload_top">
+	<div class="wp clearfix">
+		<img src="/skin/dir2/youji/images/upload_top.jpg" class="fl" />
+	</div>
+</div>
+	<?php
+	foreach($dlist as $k=>$v){
+		?>
+		<div class="datebox mt20 wp" id="day_<?php echo $k?>" date="<?php echo $k?>" >
+			<div class="dateinfo"><a>第<?php echo $v[day]?>天</a></div>
+			<div class="plist imgsize">
+				<div class="div">
+					<ul class="clearfix">
+						<?php
+						foreach($v["list"] as $kk=>$vv){
+							?>
+							<li class="photo" id="li_img_<?php echo $vv[id]?>" idvalue="<?php echo $vv[id]?>">
+								<img src="<?php echo $vv[simg]?>" id="img_<?php echo $vv[id]?>" idvalue="<?php echo $vv[id]?>" draggable="true" ondragstart="drag(event)" />
+								<div></div>
+								<a href="javascript:delete_img(<?php echo $vv[id]?>);"></a>
+							</li>
+							<?php
+						}
+						?>
+					</ul>
+				</div>
+			</div>
+			<div class="pllist clearfix">
+				<div class="div">
+					<ul class="clearfix" id="pllist_<?php echo $k?>"><?php
+						foreach($v['pllist'] as $k2=>$v2){
+							?><li idvalue="<?php echo $v2[plid]?>" id="place_<?php echo $v2[plid]?>" point="<?php echo $v2[point]?>" namevalue="<?php echo $v2[plname]?>"><?php echo $v2[plname]?><br>包含<span>0</span>个照片</li><?php
+						}
+					?></ul>
+					<div class="addbtn" onClick="addplace('<?php echo $k?>',<?php echo $yjid?>);">添加拍摄地点</div>
+				</div>
+			</div>
+		</div>
+		<?php
+	}?>
+</div>
+<div class="wp wbg mt20 pd20">
+	<form method="post" action="<?php echo safe_action();?>">
+		<div id="forminput"></div>
+		<input type="hidden" name="yjid" value="<?php echo $yjid?>" />
+		<input type="submit" class="nextstep" onClick="return place_submit();" value="下一步" />
+	</form>
+</div>
+{/block}
+{block name="script"}
+<script>
+var yjid='<?php echo $id?>';
+$(function(){
+<?php foreach($dlist as $k=>$v){?>
+	<?php foreach($v['list'] as $kk=>$vv){?>
+		img_date[<?php echo $vv[id]?>]="<?php echo $k?>";
+	<?php }?>
+<?php }?>
+<?php foreach($plist as $k=>$v){?>
+	place_img[<?php echo $k?>]=[<?php echo implode(",",$v)?>];
+	<?php foreach($v as $kk=>$vv){?>
+		img_place[<?php echo $vv?>]="<?php echo $k?>";
+		$("#li_img_<?php echo $vv?>").find("div").show().html($("#place_<?php echo $k?>").attr("namevalue"));
+	<?php }?>
+	$("#place_<?php echo $k?>").find("span").html(arrcount(place_img[<?php echo $k?>]));
+<?php }?>
+});
+$(initplace);
+</script>
+{/block}
+{block name="style"}
+<style>
+#noselect{-moz-user-select:-moz-none; -khtml-user-select:none; user-select:none;}
+.mousediv{position:absolute; display:none; background:#1269B0; filter:alpha(opacity=50); opacity:0.5;}
+.overherediv{display:none; float:left; width:20px; height:120px; margin: 0 10px 10px 0; border:dashed 2px #999; background:#eee; text-align:center; line-height:24px;}
+.adddiv{position:absolute; display:none; width:120px; height:60px; line-height:60px; text-align:center; background:#fff; border:solid 2px #1269b0; cursor:pointer;}
+.testdiv{display:none; position:fixed; left:0; top:0; min-width:100px; min-height:20px; background:red;}
+.pllist li.overthisplace{border:dashed 2px #1269b0;}
+</style>
+{/block}

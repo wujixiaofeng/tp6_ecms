@@ -1,0 +1,38 @@
+<div class="global">
+	<ul class="umenu umenu2">
+		<li<?php echo tp_cura('editinfo||editsafe||avatar');?>><a href="<?php echo url('/ucenter/avatar')?>"><i class="fa-vcard" FontAwesome></i>修改资料</a></li>
+		<li<?php echo tp_cura('atmsg||usermsg||usermsgshow||sysmsg||send');?>><a href="<?php echo url('ucenter/sysmsg')?>"><i class="fa-envelope" FontAwesome></i>我的消息<?php if($weidu){?><span class="weidu"><?php echo $weidu?></span><?php }?></a></li>
+		<li<?php echo tp_cura('mypinglun||myfav||myzan');?>><a href="<?php echo url('/ucenter/mypinglun')?>"><i class="fa-comments" FontAwesome></i>我的评论</a></li>
+		<li<?php echo tp_cura('tougao');echo tp_cura('tougao2');?>><a href="<?php echo url('/ucenter/tougao')?>"><i class="fa-file-word-o" FontAwesome></i>我的投稿</a></li>
+	</ul>
+	<?php if(in_array(request()->action(),['avatar','editsafe','editinfo'])){?>
+	<ul class="umenu umenu2">
+		<li<?php echo tp_cura('avatar');?>><a href="<?php echo url('ucenter/avatar')?>"><i class="fa-user-circle" FontAwesome></i>上传头像</a></li>
+		<li<?php echo tp_cura('editinfo');?>><a href="<?php echo url('ucenter/editinfo')?>"><i class="fa-vcard" FontAwesome></i>编辑资料</a></li>
+		<li<?php echo tp_cura('editsafe');?>><a href="<?php echo url('ucenter/editsafe')?>"><i class="fa-info-circle" FontAwesome></i>安全资料</a></li>
+	</ul>
+	<?php }?>
+	<?php if(in_array(request()->action(),['atmsg','sysmsg','usermsg','usermsgshow','send'])){?>
+	<ul class="umenu umenu2">
+		<li<?php echo tp_cura('sysmsg');?>><a href="<?php echo url('/ucenter/sysmsg')?>"><i class="fa-volume-up" FontAwesome></i>系统消息<?php if($sysweidu){?><span class="sysweidu"><?php echo $sysweidu?></span><?php }?></a></li>
+		<li<?php echo tp_cura('atmsg');?>><a href="<?php echo url('/ucenter/atmsg')?>"><i class="fa-at" FontAwesome></i>@我消息<?php if($atweidu){?><span class="atweidu"><?php echo $atweidu?></span><?php }?></a></li>
+		<li<?php echo tp_cura('usermsg||usermsgshow');?>><a href="<?php echo url('/ucenter/usermsg')?>"><i class="fa-user" FontAwesome></i>用户消息<?php if($userweidu){?><span class="userweidu"><?php echo $userweidu?></span><?php }?></a></li>
+		<li<?php echo tp_cura('send');?>><a href="<?php echo url('/ucenter/send')?>"><i class="fa-edit" FontAwesome></i>发送消息</a></li>
+	</ul>
+	<?php }?>
+	<?php if(in_array(request()->action(),['myfav','myzan','mypinglun'])){?>
+	<ul class="umenu umenu2">
+		<li<?php echo tp_cura('mypinglun');?>><a href="<?php echo url('/ucenter/mypinglun')?>"><i class="fa-comments" FontAwesome></i>我的评论</a></li>
+		<li<?php echo tp_cura('myfav');?>><a href="<?php echo url('/ucenter/myfav')?>"><i class="fa-heart" FontAwesome></i>我的收藏</a></li>
+		<li<?php echo tp_cura('myzan');?>><a href="<?php echo url('/ucenter/myzan')?>"><i class="fa-thumbs-o-up" FontAwesome></i>我的点赞</a></li>
+	</ul>
+	<?php }?>
+	<?php if(request()->action()=='tougao' or request()->action()=='youji'){?>
+	<ul class="umenu umenu2">
+		<li<?php echo (request()->action()=='tougao' and empty($_GET[a2]))?" class='cur'":""?>><a href="<?php echo url('ucenter/tougao')?>"><i class="fa-calendar-check-o" FontAwesome></i>已审核文章</a></li>
+		<li<?php echo (request()->action()=='tougao' and !empty($_GET[a2]))?" class='cur'":""?>><a href="<?php echo url('ucenter/tougao',['a2'=>'view'])?>"><i class="fa-calendar-minus-o" FontAwesome></i>审核中文章</a></li>
+		<li<?php echo (request()->action()=='youji' and empty($_GET[a2]))?" class='cur'":""?>><a href="<?php echo url('ucenter/youji')?>"><i class="fa-calendar-check-o" FontAwesome></i>已审核游记</a></li>
+		<li<?php echo (request()->action()=='youji' and !empty($_GET[a2]))?" class='cur'":""?>><a href="<?php echo url('ucenter/youji',['a2'=>'view'])?>"><i class="fa-calendar-minus-o" FontAwesome></i>审核中游记</a></li>
+	</ul>
+	<?php }?>
+</div>

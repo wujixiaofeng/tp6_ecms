@@ -1,0 +1,42 @@
+{extend name="base/base"}
+{block name="body"}
+{include file="ucenter/menu"}
+<div class="global">
+	<ul class="news">
+<?php
+$i=0;
+foreach($list as $k=>$v){
+$i++;?>
+<li class="clearfix">
+	<a class="img" href="<?php echo $v[titleurl]?>" target="_blank"><img src="<?php echo $v[img]?>" /></a>
+	<div class="lir">
+		<a href="<?php echo $v[titleurl]?>" class="tit" target="_blank"><?php echo $v[title]?></a>
+		<span><?php echo tp_subtext($v[smalltext],55)?></span>
+		<div class="infob">
+			<a href="javascript:delworks(<?php echo $v[classid]?>,<?php echo $v[id]?>);" class="fr">删除</a>
+			<?php echo $v['newstime2']?>
+		</div>
+	</div>
+</li>
+<?php
+}
+if($i==0)echo "<div class=\"nors\">暂无记录！</div>";
+?>
+	</ul>
+<div class="page2"><?php echo $pagehtml;?></div>
+</div>
+{/block}
+{block name="files"}
+<link href="/css/ucenter.css" rel="stylesheet" type="text/css" />
+{/block}
+{block name="script"}
+<script>
+function delworks(classid,id){
+	ConfirmBox({text:'确定删除吗？',title:'操作确认',ok:function(){
+		$.get("<?php echo url('/ucenter/delnews');?>",{classid:classid,id:id,t:Math.random()},function(res){
+			showmsg(res.msg,function(){if(res.ok)top.location.reload();},res.ok);
+		},'json');
+	}});
+}
+</script>
+{/block}

@@ -1,0 +1,8 @@
+<div class="listmenu3 clearfix">
+	<ul class="clearfix">
+		<li<?php if(request()->action()=='sysmsg'){?> class="cur"<?php }?>><a href="/ucenter/sysmsg.html">系统消息</a></li>
+		<li<?php if(request()->action()=='usermsg'||request()->action()=='usermsgshow'){?> class="cur"<?php }?>><a href="/ucenter/usermsg.html">用户消息</a></li>
+		<li <?php if(request()->action()=='atmsg'){?>class="cur"<?php }?>><a href="/ucenter/atmsg.html">@我消息</a></li>
+		<li <?php if(request()->action()=='send'){?>class="cur"<?php }?>><a href="/ucenter/send.html">发送消息</a></li>
+	</ul>
+</div>

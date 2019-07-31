@@ -1,0 +1,47 @@
+{extend name="base/base"}
+{block name="body"}
+	<div class="global">
+		<div class="pd1 pt0">
+			<div class="message">
+				<div class="nors">
+					<?php if(isset($message)){?>
+					<p class="success"><?php echo($message); ?></p>
+					<?php }else{?>
+					<p class="error"><?php echo($error); ?></p>
+					<?php }?>
+					<?php if($goto and $goto!='javascript:void(0);'){?>
+						<br>页面自动 <a id="href" href="<?php echo($goto); ?>">跳转</a>
+						等待时间： <b id="wait">3</b>
+					<?php }?>
+					<?php
+					if($links){
+						?><br><?php
+						foreach($links as $k=>$v){
+							?><a href="{$v}">{$k}</a><?php
+						}
+					}
+					?>
+				</div>
+			</div>
+		</div>
+	</div>
+<?php if($goto and $goto!='javascript:void(0);'){?>
+<script>
+(function(){
+var wait = document.getElementById('wait'),href = document.getElementById('href').href;
+var interval = setInterval(function(){
+	var time = --wait.innerHTML;
+	if(time <= 0) {
+		location.href = href;
+		clearInterval(interval);
+	};
+}, 1000);
+})();
+</script>
+<?php }?>
+<script>
+	if(self!=top){
+		top.showmsg('<?php echo $message?$message:$error?>',function(){if('<?php echo($goto); ?>'){top.location='<?php echo($goto); ?>';}},<?php echo !!$message?>);
+	}
+</script>
+{/block}

@@ -1,0 +1,58 @@
+{extend name="base/base"}
+{block name="body"}
+<div class="passport">
+	<h3>会员登录</h3>
+	<form method="post" action="/login.html" id="form1" class="p05em">
+		<input type="text" name="username" id="username" placeholder="用户名"/>
+		<input type="password" name="password" id="password" placeholder="密码"/>
+		<input type="submit" value="登录">
+		<div class="action clearfix">
+			<label class="fl reminput clearfix"><input type="checkbox" value="315360000" name="remember" checked /><span>记住我</span></label>
+			<a class="fr" href="/getpassword.html">忘记密码</a>
+			<a class="fr" href="/register.html">注册账号</a>
+		</div>
+	</form>
+</div>
+<div class="closediv fa fa-close" onClick="top.$('.passportdiv').remove();"></div>
+{/block}
+{block name="files"}
+<link rel="stylesheet" href="/files/passport.css" />
+{/block}
+{block name="script"} 
+<script>
+$(document).ready(function(){
+	$('#form1').submit(function(){
+		if(!$(this).find('input[name="username"]').val()){
+			top.errmsg('请填写用户名！');
+			return false;
+		}
+		if(!$(this).find('input[name="password"]').val()){
+			top.errmsg('请填写密码！');
+			return false;
+		}
+		var self = $(this);
+		$.post(self.attr("action"), self.serialize(), success, "json");
+		return false;
+
+		function success(data){
+			if(data.ok){
+				if(data.uc){
+					var exp=/(http\:\/\/.*?)\"{1}/ig;
+					var jsurl;
+					while((jsurl=exp.exec(data.uc))!=null){
+						//$.getScript(result);
+						//$.get(result);
+						$('<img/>').attr('src',jsurl);
+					}
+				}
+				top.okmsg(data.msg,function(){
+					top.location.reload();
+				});
+			} else {
+				top.errmsg(data.msg);
+			}
+		}
+	});
+});
+</script>
+{/block}

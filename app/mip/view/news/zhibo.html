@@ -1,0 +1,26 @@
+{extend name="base/base"}
+{block name="body"}
+<div class="global">
+	<h1 class="margin01"><?php echo $info['title']?></h1>
+	<p class="newsinfo margin02">
+		<span><?php echo $info['newstime']?></span> 
+		<span class="marginleft01"><?php echo $info['writer']?$info['writer']:$info['username']?></span>
+	</p>
+
+
+<?php
+$picpath.='<div class="slide clearfix" id="slide"><mip-carousel
+		autoplay
+		defer="3000" 
+		layout="responsive" 
+		width="320" 
+		height="223"
+		buttonController>';
+foreach($info['list'] as $k=>$v){
+	$picpath.='<div><mip-img src="'.$v['img'].'"></mip-img><div class="mip-carousle-subtitle">'.$v['text'].'</div></div>';
+} 
+$picpath.='</mip-carousel></div>';
+echo $picpath;
+?>
+</div>
+{/block}

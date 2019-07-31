@@ -1,0 +1,18 @@
+<?php if(!defined("INAPP"))exit; ?>
+<div class="lefttop clearfix">
+	<div class="topavatar">
+		<div class="avatar"><img src="<?php echo user_avatar($user[userid])?>" /></div>
+		<a href="/ucenter/avatar.html"></a>
+	</div>
+	<div class="username"><?php echo $user[username]?></div>
+	<div class="saytext"><?php echo tp_subtext($user[saytext],120,'...')?></div>
+</div>
+<ul>
+	<li<?php if(in_array(request()->action(),['avatar','editinfo','editsafe'])){?> class="cur"<?php }?>><a href="/ucenter/avatar.html">个人设置</a></li>
+	<li<?php if(request()->action()=="tougao"){?> class="cur"<?php }?>><a href="/ucenter/tougao.html">我的投稿</a></li>
+	<li<?php if(request()->action()=="youji"){?> class="cur"<?php }?>><a href="/ucenter/youji.html">我的游记</a></li>
+	<li<?php if(in_array(request()->action(),['usermsg','atmsg','sysmsg','usermsgshow','send'])){?> class="cur"<?php }?>><a href="/ucenter/sysmsg.html">我的消息</a></li>
+	<li<?php if(request()->action()=="mypinglun"){?> class="cur"<?php }?>><a href="/ucenter/mypinglun.html">我的评论</a></li>
+	<li<?php if(in_array(request()->action(),['myfav','myzan'])){?> class="cur"<?php }?>><a href="/ucenter/myfav.html">我的收藏</a></li>
+	<li<?php if(request()->action()=="fankui"){?> class="cur"<?php }?>><a href="/ucenter/fankui.html">意见反馈</a></li>
+</ul>

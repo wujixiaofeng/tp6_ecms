@@ -1,0 +1,19 @@
+{extend name="base/base"}
+{block name="body"}
+{include file="public/nav"}
+<div class="global">
+	<ul class="piclist clearfix">
+		<?php foreach($list as $k=>$v){?>
+<li>
+	<a href="<?php echo $v[titleurl]?>" class="img" target="_blank"><mip-img
+  layout="responsive"
+  width="350"
+  height="260" src="<?php echo $v['titlepic']?>"></mip-img></a>
+	<a href="<?php echo $v[titleurl]?>" class="tit" target="_blank"><?=$v["ftitle"]?$v["ftitle"]:$v["title"]?></a>
+	<mip-img src="http://m.domain.com/images/tushanglibg.jpg" class="baifen100"></mip-img>
+</li>
+		<?php }?>
+	</ul>
+	<div class="page2"><?php echo $pagehtml;?></div>
+</div>
+{/block}

@@ -1,0 +1,79 @@
+{extend name="base/base3"}
+{block name="body"}
+
+	<div class="div1">
+		<form method="post" id="form1">
+			<input type=hidden name=ecmsfrom value="<?=$from?>">
+			<input type=hidden name=enews value=login>
+			<?php if($_REQUEST[bind]){?><input name="tobind" type="hidden" id="tobind" value="1"><?php }?>
+			<div class="posr input1"><input type="text" name="username" placeholder="ÓÃ»§Ãû" id="username" /></div>
+			<div class="posr input1"><input type="password" name="password" placeholder="ÃÜÂë" id="password" /></div>
+			<div class="checkinput clearfix">
+				<label class="label"><input type="checkbox" value="315360000" name="remember" checked /><div>¼Ç×¡µÇÂ¼×´Ì¬</div></label>
+				<div class="fr">
+					<a href="/getpassword.html">Íü¼ÇÃÜÂë</a>
+					<a href="/register.html">×¢²áÕËºÅ</a>
+				</div>
+			</div>
+			<div class="clearfix">
+				<input type="submit" value="µÇÂ¼" id="button" class="fl" />
+				<input type="hidden" name="ispassport" value="1" />
+				<div class="logintype fr"><!--<a href="/">ÊÖ»úºÅµÇÂ¼</a>--></div>
+			</div>
+		</form>
+	</div>
+	<div class="connectbtn">
+		<div class="div2">
+			<h2>Äú»¹¿ÉÒÔÊ¹ÓÃÒÔÏÂÕËºÅÖ±½ÓµÇÂ¼£º</h2>
+			<ul class="clearfix">
+				<li class="sina"><a href="javascript:void(0);" href1="/e/memberconnect/?apptype=sina" target="_top" title="Î¢²©µÇÂ¼"></a></li>
+				<li class="qq"><a href1="javascript:void(0);" href="http://bbs.domain.com/connect.php?mod=login&op=init&statfrom=login&referer=loginjump.php%3Furl%3D" target="_top" title="QQµÇÂ¼" onClick="return qqlogin(this)"></a></li>
+				<li class="weixin"><a href="javascript:void(0);" href1="/e/memberconnect/?apptype=weixin" target="_top" title="Î¢ĞÅµÇÂ¼"></a></li>
+			</ul>
+		</div>
+	</div>
+
+{/block}
+{block name="files"}
+<link href="/skin/pai3/css/passport.css" rel="stylesheet" type="text/css" />
+{/block}
+{block name="script"} 
+<script>
+top.window.passportbox.show().sizeto({width:510,height:480});
+top.window.passportbox.title("µÇÂ¼ÍøÕ¾");
+$(function(){
+	$("#form1").submit(function(){
+		var self = $(this);
+		if(!self.find('input[name="username"]').val()){
+			errmsg('ÇëÌîĞ´ÓÃ»§Ãû£¡');
+			return false;
+		}
+		if(!self.find('input[name="password"]').val()){
+			errmsg('ÇëÌîĞ´ÃÜÂë£¡');
+			return false;
+		}
+		$.post(self.attr("action"), self.serialize(), success, "json");
+		return false;
+
+		function success(data){
+			if(data.ok){
+				if(data.uc){
+					var exp=/(http\:\/\/.*?)\"{1}/ig;
+					var jsurl;
+					while((jsurl=exp.exec(data.uc))!=null){
+						//$.getScript(result);
+						//$.get(result);
+						$('<img/>').attr('src',jsurl);
+					}
+				}
+				top.okmsg(data.msg,function(){
+					top.location=data.goto;
+				});
+			} else {
+				top.errmsg(data.msg);
+			}
+		}
+	});
+});
+</script> 
+{/block}

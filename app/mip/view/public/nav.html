@@ -1,0 +1,9 @@
+<div class="nav clearfix">
+<?php $classidarr=toutf8(showing_class());?>
+<ul>
+	<li><a href="http://m.domain.com/index.php" target="_blank">首页</a></li>
+	<?php foreach($classidarr as $k=>$v){
+		echo "<li><a href=\"http://m.domain.com/".$class_r[$k][classpath]."/\" target=\"_blank\">".$v."</a></li>";
+	}?>
+</ul>
+</div>

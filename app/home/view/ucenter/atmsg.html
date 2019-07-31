@@ -1,0 +1,173 @@
+{extend name="base/base1"}
+{block name="body"}
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="wp mt20 mb20 clearfix">
+	<div class="userleft">
+		{include file="ucenter/menu"}
+	</div>
+	<div class="userright xiaoxi">
+		<div class="righttitle1">@我消息</div>
+		{include file="ucenter/msgmenu"}
+		
+<div id="plformdiv">
+	<form name="repl_--repid--" method="post" action="/pinglun/submit" target="ifr" onSubmit="return checkpinglun(this);">
+		<textarea name="saytext" id="saytext">--atuser--</textarea>
+		<input name="atplid" type="hidden" value="--atplid--">
+		<input name="id" type="hidden" value="--id--">
+		<input name="classid" type="hidden" value="--classid--">
+		<input name="enews" type="hidden" value="AddPl">
+		<input name="repid" type="hidden" id="repid" value="--repid--">
+		<input name="ecmsfrom" type="hidden" value="<?php echo $_SERVER['REQUEST_URI']?>">
+		<input name="nomember" type="hidden" value="1">
+		<input name="inifr" type="hidden" value="1">
+		<div class="bottom">
+			<div class="yzm">
+				验证码：<input name="key" type="text" size="6">
+				<img src="/e/ShowKey/?v=pl&t=--random--" onclick="this.src='/e/ShowKey/?v=pl&t='+Math.random()" />
+				<img src="/emoticons/0.gif" title="添加表情" class="biaoqingBTN" />
+				<div class="layui-form layui-inline"><input type="checkbox" name="niming" lay-skin="switch" value="1" lay-text="匿名|公开" /></div>
+			</div>
+			<div class="btn">
+				<input type="submit" value="提交" />
+			</div>
+		</div>
+	</form>
+</div>
+<ul class="atmi atme pinglun2">
+<?php
+
+foreach($atlist as $k=>$v){
+	$includelink=" onclick=\"huifu2('$v[mid]','$v[classid]','$v[id]','$v[replid]','$v[plid]','$v[from_username]');\"";
+	?>
+	<li class="clearfix" id="mid_<?php echo $v[mid]?>">
+		<input class="delatmsgsel" type="checkbox" name="id[]" value="<?php echo $v[mid]?>" />
+		<div class="atmetop clearfix">
+			<div class="avatar"><img src="<?php echo user_avatar($v['from_userid'],$v['atplid']);?>" /></div>
+			<div class="username"><?php echo empty($v[from_username])?"匿名":$v[from_username]?></div>
+			<div class="shuxian">|</div>
+			<div class="time"><?php echo formattime(strtotime($v[msgtime]))?></div>
+		</div>
+		<div class="plinfo">
+			<div class="msgcont">
+				<?php echo tp_plbiaoqing($v[msgtext]);?>
+				<?php if($v['yuanwen']){?><br><span>原文内容：</span><?php echo tp_plbiaoqing($v['yuanwen']);?><?php }?>
+				<?php if($v['newstitle']){?><br><span>评论来自：</span><a href="<?php echo $v['titleurl']?>" target="_blank"><?php echo $v['newstitle']?></a><?php }?>
+			</div>
+			<?php if($v['yuanwen'] and $v[titleurl]){?><a class="rightbtn" href="javascript:void(0);"<?php echo $includelink?>><i class="layui-icon">&#xe642;</i>回复</a><?php }?>
+			<a class="rightbtn" href="javascript:delatmsg(<?php echo $v[mid]?>);"><i class="layui-icon">&#xe640;</i>删除</a>
+		</div>
+		<div class="huifudiv" id="huifudiv<?php echo $v[mid]?>"></div>
+	</li>
+	<?php
+}
+?>
+</ul>
+
+<div class="mt20 clearfix">
+<label class="fl checkalllabel01"><input type="checkbox" value="1" name="chkall" onClick="CheckAll();" class="fl" />全选</label>
+<input class="submit01 fl" type="button" name="submit" value="删除" onClick="delatmsg();" />
+</div>
+<?php echo $pagehtml;?>
+<script>
+function CheckAll(){
+	var ischecked=$('input[name="chkall"]').is(":checked");
+	$('.delatmsgsel').each(function(){
+		if(ischecked){
+			$(this)[0].checked=true;
+		}else{
+			$(this)[0].checked=false;
+		}
+	});
+}
+function delatmsg(mid){
+	if(!mid){
+		if($('.delatmsgsel:checked').length==0){
+			errmsg('请先选择消息！');
+			return false;
+		}
+		var mid=[];
+		$('.delatmsgsel:checked').each(function(){
+			mid.push($(this).val());
+		});
+	}
+	layer.confirm('确定删除吗？',{icon:3,title:'删除消息'},function(index){
+		$.post("<?php echo url('/ucenter/handle')?>",{submit:'del',tbtype:'at',mid:mid},function(data){
+			showmsg(data.msg,function(){
+				if(data.ok){
+					//location.reload();
+					if(typeof mid=='object'){
+						for(var i in mid){
+							$('#mid_'+mid[i]).remove();
+						}
+					}else{
+						$('#mid_'+mid).remove();
+					}
+					if($('ul.atme li').length==0){
+						location.reload();//pagej1();
+					}
+				}
+			},data.ok);
+		},'json');
+	},function(index){layer.close(index);});
+}
+</script>
+	</div>
+</div>
+{/block}
+{block name="files"}
+{/block}
+{block name="script"}
+<script>
+function CheckAll(){
+	var ischecked=$('input[name="chkall"]').is(":checked");
+	$('.delatmsgsel').each(function(){
+		if(ischecked){
+			$(this)[0].checked=true;
+		}else{
+			$(this)[0].checked=false;
+		}
+	});
+}
+function delatmsg(mid){
+	if(!mid){
+		if($('.delatmsgsel:checked').length==0){
+			errmsg('请先选择消息！');
+			return false;
+		}
+		var mid=[];
+		$('.delatmsgsel:checked').each(function(){
+			mid.push($(this).val());
+		});
+	}
+	ConfirmBox({text:'确定删除吗？',title:'操作确认',ok:function(){
+		$.post("<?php echo url('/ucenter/handle')?>",{submit:'del',tbtype:'at',id:mid,t:Math.random()},function(data){
+			showmsg(data.msg,function(){
+				if(data.ok){
+					if(typeof mid=='object'){
+						for(var i in mid){
+							$('#mid_'+mid[i]).remove();
+						}
+					}else{
+						$('#mid_'+mid).remove();
+					}
+					if($('ul.atme li').length==0){
+						location.reload();//pagej1();
+					}
+				}
+			},data.ok);
+		},'json');
+	}});
+}
+</script>
+{/block}

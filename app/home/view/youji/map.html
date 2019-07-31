@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style type="text/css">
+body, html,#allmap {width: 100%;height: 100%;overflow: hidden;margin:0;font-family:"微软雅黑";}
+</style>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=aGqvgXLcpkleE5FQXi1RyPDu"></script>
+<script type="text/javascript" src="/skin/dir2/js/jquery.js"></script>
+<title>行程线路</title>
+<script type="text/javascript">
+var points=[<?php $i=0;foreach($pointlist as $k=>$v){ $i++;?><?php echo $i>1?",":""?>new BMap.Point(<?php echo $v;?>)<?php }?>];
+$(function(){
+	var map = new BMap.Map("allmap");//创建Map实例
+	if(points.length==0){
+		map.centerAndZoom(new BMap.Point(116.404, 39.915), 11)//初始化地图,设置中心点坐标和地图级别
+	}
+	map.addControl(new BMap.MapTypeControl());//添加地图类型控件
+	//map.setCurrentCity("北京");//设置地图显示的城市 此项是必须设置的
+	map.enableScrollWheelZoom(true);//开启鼠标滚轮缩放
+	
+	//var poi = new BMap.Point(121.44211,31.218296);
+	//map.centerAndZoom(poi);
+
+	var polyline = new BMap.Polyline(points,{strokeColor:"blue", strokeWeight:2/*线的宽度*/, strokeOpacity:0.5});
+	map.addOverlay(polyline);
+	for(i in points){
+		var marker = new BMap.Marker(points[i]);//创建标注
+		map.addOverlay(marker);//将标注添加到地图中
+	}
+	map.setViewport(points);
+});
+</script>
+</head>
+<body>
+	<div id="allmap"></div>
+</body>
+</html>

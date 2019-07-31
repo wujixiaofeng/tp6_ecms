@@ -1,0 +1,72 @@
+<form class="search clearfix" action="<?php echo url('news/search');?>">
+	<input name="tbname" value="news" type="hidden" />
+	<div class="select">
+		<span></span>
+		<div class="value">新闻</div>
+		<ul>
+			<li idvalue="news">新闻</li>
+			<li idvalue="pictures">图赏</li>
+			<li idvalue="youji">游记</li>
+			<li idvalue="zhibo">直播</li>
+			<!--<li idvalue="shipin">视频</li>-->
+		</ul>
+	</div>
+	<input type="text" placeholder="请输入关键词" name="keywords" value="<?php echo $keywords;?>" />
+	<input type="submit" value="搜索" />
+</form>
+<script>
+var valueclick=false,searchstart=true;
+$(document).click(function(e){
+	if(!valueclick){
+		searchulhide();
+	}
+	valueclick=false;
+});
+$(".search .select .value,.search .select span").click(searchulshow);
+$(".search .select li").each(function(index, element) {
+	$(this).click(function(){setselectvalue($(this).attr("idvalue"));});
+});
+$(".search .select").height($(".search input[type='text']").height());
+$(".search .select").css({lineHeight:$(".search input[type='text']").height()+"px"});
+function setselectvalue(value){
+	if($(".search .select li[idvalue='"+value+"']").attr("idvalue")){
+		$(".search .select .value").html($(".search .select li[idvalue='"+value+"']").html());
+		$(".search input[name='tbname']").val(value);
+	}
+	searchulhide();
+}
+function searchulshow(){
+	valueclick=true;
+	if($(".search .select ul").is(':visible')){
+		searchulhide();
+	}else{
+		var ulheight=$(".search .select ul").show().stop(true,true).height('auto').height();
+		$(".search .select ul").height(0).animate({height:ulheight});
+		if(!$(".search span").hasClass('r180')){
+			$(".search span").removeClass('r1802');
+			$(".search span").aniClass('r180');
+		}
+	}
+}
+function searchulhide(){
+	if($(".search .select ul").is(':visible'))$(".search .select ul").stop().animate({height:0},function(){
+		$(".search .select ul").hide();
+	});
+	if(searchstart){
+		searchstart=false;
+		return false;
+	}
+	if($(".search span").hasClass('r180')&&!$(".search span").hasClass('r1802')){
+		$(".search span").removeClass('r180');
+		$(".search span").aniClass('r1802');
+	}
+}
+setselectvalue("<?php echo $tbname;?>");
+$('form.search').submit(function(){
+	if(!$(this).find('input[name="keywords"]').val()){
+		errmsg('请填写搜索关键词！');
+		return false;
+	}
+	return true;
+});
+</script>

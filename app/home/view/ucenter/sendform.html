@@ -1,0 +1,32 @@
+<script>
+var submitting=false;
+function checkmsgform(f){
+	if(f.touid&&f.touid.value==""){
+		errmsg("用户ID错误");
+		return false;
+	}
+	if(f.tousername&&f.tousername.value==""){
+		errmsg("用户名错误");
+		return false;
+	}
+	if($("[name='text']").val()==""){
+		errmsg("请填写消息内容");
+		return false;
+	}
+	$.post("<?php echo url('/ucenter/sendmsg');?>",$(f).serialize(),function(res){
+		if(submitting)return;
+		submitting=true;
+		if(res.ok){
+			okmsg(res.msg,function(){if(res.goto){location=res.goto;}else{location.reload();}submitting=false;});
+		}else{
+			errmsg(res.msg,function(){submitting=false;});
+		}
+	},'json');
+	return false;
+}
+</script>
+<form method="post" class="form3<?php if(!$touserid){?> left<?php }?>" target="ifr" onSubmit="return checkmsgform(this);">
+<?php if($touserid){?><input type="hidden" name="touid" value="<?php echo $touserid?>"><?php }else{?>发送给：<input type="text" name="tousername" value="<?php echo input('get.touser');?>"><?php }?>
+	<div class="clearfix"><div class="text"><textarea name="text"></textarea></div></div>
+	<input type="submit" value="发送">
+</form>

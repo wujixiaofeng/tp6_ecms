@@ -1,0 +1,52 @@
+{extend name="base/base1"}
+{block name="body"}
+<div class="wp mt20 mb20 clearfix">
+	<div class="userleft">
+		{include file="ucenter/menu"}
+	</div>
+	<div class="userright">
+		<div class="righttitle1">个人头像</div>
+		{include file="ucenter/setmenu"}
+		<div align="center">
+			<img class="avatarimg" src="<?php echo user_avatar($user[userid])?>" /><br><br>
+			<div class="upbtn"><div class="btnstr">点击上<br>传头像</div><input type="file" accept="image/*;capture=camera" id="uploadavatar"></div>
+		</div>
+	</div>
+</div>
+{/block}
+{block name="style"}
+<style>
+.avatarimg{margin-top:50px; border-radius:1em;}
+.upbtn{position:relative; width:4em; height:4em; margin:2em auto; font-size:2em; background:#F3633E; border-radius:0.3em; color:#fff; line-height:1.2em; text-align:center;}
+.upbtn .btnstr{position:absolute; left:0; top:0; width:4em; height:3em; padding:0.8em 0;}
+.upbtn input{position:absolute; left:0; top:0; width:100%; height:100%; opacity:0;}
+</style>
+{/block}
+{block name="files"}
+<link href="/skin/dir2/css/h5c.css" rel="stylesheet" type="text/css" />
+<script src="/skin/dir2/js/h5c.js"></script>
+{/block}
+{block name="script"}
+<script>
+$(document).ready(function(){
+	html5cutimg({
+		input:"#uploadavatar",
+		tips:'头像需要是正方形的，所以需要裁剪',
+		width:300,
+		height:300,
+		callback:function(data){
+			$.post("<?php echo safe_action()?>",{base64:data,type:'image/jpeg',isavatar:1},function(data){
+				if(data['ok']){
+					okmsg('上传完成',function(){location.reload();});
+				}else{
+					errmsg(data['msg']);
+				}
+			},'json');
+		},
+		onerror:function(data){
+			errmsg(data);
+		}
+	});
+});
+</script>
+{/block}

@@ -1,0 +1,207 @@
+{extend name="base/base"}
+{block name="body"}
+<div class="zhiboheader">
+	<div class="wp clearfix">
+		<div class="headerleft">
+			<a class="fl" href="/"><img src="/skin/dir2/images/logo3.png" /></a>
+			<img src="/skin/dir2/images/zhibotopicon.png" />
+		</div>
+		<div class="headerright">
+			<a href="/zhibo/">往期直播</a>
+			<div class="useract"><script src="/skin/dir2/extend/useract.php"></script></div>
+		</div>
+	</div>
+</div>
+<div class="newstop" style="background:url(/d/topimg/<?php echo $id%20?>.jpg) center no-repeat;">
+	<div class="wp">
+		<div class="mainleft">
+			<div class="newsclass"><a href="/<?php echo $class_r[$classid][classpath]?>/"><?php echo $class_r[$classid][classname]?></a></div>
+			<h1 class="newstitle"><?php echo $info[title]?></h1>
+		</div>
+	</div>
+</div>
+<div class="wp clearfix">
+	<div class="mainleft posr">
+		<div class="whiteleft posa"></div>
+		<div class="zbinfo">
+			<div class="fl">
+				<a href="javascript:zhibopaixu(1);" class="zuixin">最新发表</a>
+				<a href="javascript:zhibopaixu(-1);" class="zuizao">最早发表</a>
+			</div>
+			<div class="fr bdsharebuttonbox bdsharebuttonbox1">
+				<b class="fl">分享到您的圈子：</b>
+				<a title="分享到QQ空间" class="bds_qzone" href="javascript:void(0);" data-cmd="qzone"></a>
+				<a title="分享给QQ好友" class="bds_sqq" href="javascript:void(0);" data-cmd="sqq"></a>
+				<a title="分享到新浪微博" class="bds_tsina" href="javascript:void(0);" data-cmd="tsina"></a>
+				<a title="分享到微信" class="bds_weixin" href="javascript:void(0);" data-cmd="weixin"></a>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="wp clearfix">
+	<div class="zbleft">
+			<form action="javascript:void(0);" class="addform" id="form1">
+				<input type="hidden" name="zbid" value="<?php echo $info[id]?>" />
+				<input type="hidden" name="classid" value="<?php echo $info[classid]?>" />
+				<textarea name="text"></textarea>
+				<div class="clearfix">
+					<div class="fl"><label>上传图片 <input type="file" name="img" /></label></div>
+					<div class="fr"><input type="submit" value="提交" /></div>
+				</div>
+			</form>
+		<div class="live">
+			<div class="title">
+				<img class="lineimgtop" src="/skin/dir2/images/zhibotopleft.png" />
+				<div class="state"><?php if($info[state]==0){echo "未开始";}elseif($info[state]==1){echo "正在直播";}elseif($info[state]==2){echo "直播结束";}?></div>
+				<div class="time"><?php echo $info[newstime]?>开始</div>
+			</div>
+			<ul class="clearfix">
+				<?php
+					$linum=0;
+					foreach($info['list'] as $k=>$v){
+						$linum++;
+				?>
+				<li linum="<?php echo $v[infoid]?>" infoid="<?php echo $v[infoid]?>">
+					<div class="time"><?php echo $v[addtime]?></div>
+					<div class="dian"></div>
+					<div class="licont">
+						<?php if($v[img]){?><img data-original="<?php echo $v[img]?>" /><?php }?>
+						<p><?php echo $v[text]?></p>
+					</div>
+					<div class="del"><a href="javascript:delzbinfo(<?php echo $v[infoid]?>);">删除</a></div>
+				</li>
+				<?php }?>
+			</ul>
+		</div>
+			<form action="javascript:void(0);" class="addform" id="form2">
+				<input type="hidden" name="zbid" value="<?php echo $info[id]?>" />
+				<input type="hidden" name="classid" value="<?php echo $info[classid]?>" />
+				<textarea name="text"></textarea>
+				<div class="clearfix">
+					<div class="fl"><label>上传图片 <input type="file" name="img" /></label></div>
+					<div class="fr"><input type="submit" value="提交" /></div>
+				</div>
+			</form>
+	</div>
+	<script>handlezhibo();</script>
+	<div class="zbright">
+		<div class="zuozhe clearfix">
+			<img src="<?php echo avatar($info[userid],$info[id],1)?>" class="fl" />
+			<div class="fr">
+				<div class="username"><a href="/zuozhe<?php echo $info['ismember']?1:''?>-<?php echo $info['userid'];?>.html" target="_blank"><?php echo $info[username]?></a></div>
+				<span class="wenzhang">直播数：<?php echo $zhibocount?>篇</span>
+				<span class="click">点击量：<?php echo $info['onclick']?></span>
+				<!--<span class="pv">浏览数：</span>-->
+			</div>
+			
+		</div>
+		<div class="desc">
+			<h4>直播说明</h4>
+			<p><?php echo $info[smalltext]?></p>
+		</div>
+		<div class="pl pinglun2">
+			<h4>评论</h4>
+			<ul id="plul"></ul>
+			<script>zbpl("<?php echo $info[classid]?>","<?php echo $info[id]?>",1);</script>
+			<form name="saypl" method="post" action="javascript:void(0);">
+				<div class="plact clearfix" style="display:<?php echo tp_login()?'block':'none'?>;">
+					<textarea name="saytext" id="saytext"></textarea>
+					<input name="id" type="hidden" value="<?php echo $info[id]?>">
+					<input name="classid" type="hidden" value="<?php echo $info[classid]?>">
+					<input name="enews" type="hidden" value="AddPl">
+					<input name="repid" type="hidden" id="repid" value="0">
+					<input name="ecmsfrom" type="hidden" value="<?php echo $info[titleurl]?>">
+					<input name="nomember" type="hidden" value="1">
+					<input class="fr" type="submit" value="发表评论" />
+				</div>
+				<div class="pllogin clearfix" style="display:<?php echo tp_login()?'none':'block'?>;">
+					<a href="/login.html?from=<?php echo urlencode(request()->url())?>">登陆</a>
+					<a href="/register.html?from=<?php echo urlencode(request()->url())?>">注册</a>
+				</div>
+			</form>
+			<iframe name="plifr" class="size0"></iframe>
+		</div>
+	</div>
+</div>
+<div class="shuabtn">
+	<img src="/skin/dir2/images/tushang/tushang_btn3.png" />
+	<span id="shuastr"><span id="shuamiao"></span>秒后刷新</span>
+</div>
+<div class="askjump askjump1">
+	<div>是否刷新页面</div>
+	<div><a href="javascript:shua.shua2();">刷新</a> <a href="javascript:shua.settime2();">不刷新</a> <a href="javascript:shua.auto();">自动刷新</a></div>
+</div>
+<div class="askjump askjump2">
+	<div>是否自动刷新</div>
+	<a href="javascript:shua.noauto();">不自动刷新</a></div>
+</div>
+<?php echo $info[state]==1?"<script>shua.init($info[paixu]);</script>":""?>
+<script>
+function delzbinfo(id){
+	layer.confirm('是否删除此条直播内容？',{icon:3,title:'操作确认'},function(index){
+		$.get('/zhibo/delinfo',{infoid:id,t:Math.random()},function(res){
+			if(res.ok){
+				okmsg(res.msg,function(){$('li[infoid="'+id+'"]').remove();});
+			}else{
+				errmsg(res.msg);
+			}
+		},'json');
+	},function(index){layer.close(index);});
+}
+$('.addform').submit(function(){
+	var self=$(this);
+	if(!self.find('textarea[name="text"]').val()&&!self.find('input[name="img"]').val()){
+		errmsg('请填写文字或选择图片！');
+		return false;
+	}
+	var formData = new FormData(self[0]);
+	$.ajax({
+		url:'/zhibo/submit',
+		type:'post',
+		async:false,
+		cache:false,
+		contentType:false,
+		processData:false,
+		dataType:'json',
+		data:formData,
+		success:function(res){
+			if(res.ok){
+				okmsg(res.msg,function(){location.reload();});
+			}else{
+				errmsg(res.msg);
+			}
+		}
+	});
+	return false;
+});
+$('form[name="saypl"]').submit(function(){
+	var plv=$(this).find('#saytext').val();
+	if(!plv.replace(/@.*?[:;：；]/,"")){
+		errmsg("请填写评论内容！");
+		return false;
+	}
+	$.post('/pinglun/submit',$(this).serialize(),function(res){
+		showmsg(res.msg,function(){
+			if(res.ok){
+				zbpl('<?php echo $classid?>','<?php echo $id?>',1);
+				$('form[name="saypl"]').find('textarea[name="saytext"]').val('');
+				$('form[name="saypl"]').find('input[name="repid"]').val('');
+				$('form[name="saypl"]').find('input[name="key"]').val('');
+			}
+		},res.ok);
+	},'json');
+	return false;
+});
+</script>
+{/block}
+{block name="script"}
+<script>
+var showzhiboadmin=<?php echo (loginadmin() or in_array($user['userid'],(array)config('config.zhibouser'))?'true':'false');?>;
+var cnzzinfo={category:"<?php echo $class_r[$classid]['classname'];?>",label:"<?php echo $info['title'];?>"}
+</script>
+{/block}
+{block name="files"}
+<link href="/skin/dir2/css/newsshow.css" rel="stylesheet" type="text/css" />
+<link href="/skin/dir2/css/zhiboshow.css" rel="stylesheet" type="text/css" />
+<script src="/skin/dir2/js/jquery.lazyload.js"></script>
+{/block}

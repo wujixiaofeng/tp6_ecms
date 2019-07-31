@@ -1,0 +1,10 @@
+<?php
+if(!$isindex){
+	if($user['userid']>0){
+		?>欢迎您，<?php echo $user['username']?> <a href="/ucenter.html">个人中心</a> <?php
+		?><?php if($user[havemsg]){?> <a href='<?php echo "/ucenter/".($user[havemsg]&4?"sysmsg":($user[havemsg]&2?"atmsg":"usermsg")).".html"?>' title="您有未读消息"><img src="/skin/dir2/images/newmsg.gif" /></a><?php }?> <a href='javascript:logout();'>退出</a> <?php
+	}else{
+		?><a href="javascript:showpassport('login');" class="a2">登录</a> <a href="javascript:showpassport('reg');" class="a2">注册</a><?php
+	}
+}
+?>

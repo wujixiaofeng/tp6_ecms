@@ -1,0 +1,40 @@
+<ul>
+<?php if($repllist){
+$plcount2=0;
+foreach($repllist as $k2=>$v2){
+	$plcount2++;
+	if($v2[isdel]){
+		$v2[saytext]='[此评论已经被删除！]';
+		$v2[username]='';
+		$v2[userid]='';
+	}
+	if($v2[userid] and $v2[niming]==0){
+		$plusername=$v2[username];
+		$pluserid=$v2[userid];
+	}else{
+		$plusername="";
+		$pluserid=0;
+	}
+	$saytime=$v2['saytime'];
+	$saytext=plbiaoqing(RepPltextFace(stripSlashes($v2['saytext'])));
+	$atplid=$v2[plid];
+	$huifuclick=" onclick=\"huifu('$huifudivid','$huifuid','$atplid','$plusername','$pluserid','$guandian');\"";
+?>
+	<li class="clearfix">
+		<div class="avatar"><img src="<?php echo user_avatar($pluserid,$v2[plid])?>" /></div>
+		<div class="plinfo">
+			<div class="clearfix">
+				<div class="username"><?php echo $plusername?$plusername:"匿名"?></div>
+			</div>
+			<div class="pltext clearfix"><div class="jiao"></div><?php echo $saytext?></div>
+			<div class="plbottom clearfix">
+				<div class="fl pltime"><?php echo $saytime?></div>
+				<a href="javascript:void(0);"<?php echo $huifuclick?> class="fr">回复</a>
+			</div>
+		</div>
+	</li>
+<?php
+}
+?>
+<?php }?></ul>
+<?php echo getmpagehtml($replrscount,$replpagesize,$replpage,"javascript:replpage($repid,[PAGE],$ztid,$classid,$id,$guandian);");?>

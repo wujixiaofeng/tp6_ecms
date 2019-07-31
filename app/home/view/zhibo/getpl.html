@@ -1,0 +1,27 @@
+<?php
+foreach($list as $k=>$v ){
+	if($v[niming]){
+		$v[username]='';
+		$v[userid]=0;
+	}
+	$saytime=date("m月d日",$v['saytime']);
+	$saytext=stripSlashes($v['saytext']);
+	?>
+	<li class="clearfix">
+		<img src="<?php echo avatar($v[userid],$v[plid])?>" class="fl avatar" />
+		<div class="fr plinfo">
+			<span class="font2"><?php echo $v[username]?$v[username]:"匿名"?></span><br>
+			<div class="text1">
+				<div class="text2">
+					<?php if($v['yuanwen']){?><div class="yuanwen">原文【<?php echo $v['yuanwen'][username]?>：<?php echo $v['yuanwen'][saytext]?>】</div><?php }?>
+					<?php echo $saytext?>
+				</div>
+				<?php echo $saytime?>
+				<!--<a href="javascript:plzan(<?php echo $v[plid]?>,<?php echo $v[classid]?>,<?php echo $v[id]?>);">赞[<span class="zcpldiv<?php echo $v[plid]?>"><?php echo $v[zcnum]?></span>]</a>-->
+				<a href="javascript:void(0);" onclick="javascript:document.saypl.repid.value='<?php echo $v[plid]?>';<?php if($v[username]){?>document.saypl.saytext.innerHTML='@<?php echo $v[username]?>:';<?php }?>document.saypl.saytext.focus();">回复</a>
+			</div>
+		</div>
+	</li>
+	<?php
+}
+?><?php echo $pagehtml;?>

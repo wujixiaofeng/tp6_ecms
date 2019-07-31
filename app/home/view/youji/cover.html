@@ -1,0 +1,73 @@
+{extend name="youji/base"}
+{block name="body"}
+<div id="noselect">
+<div class="upload_top">
+	<div class="wp clearfix">
+		<img src="/skin/dir2/youji/images/upload_top.jpg" class="fl" />
+	</div>
+</div>
+<div class="mt10">
+	<div class="wp wbg mt10">
+		<div class="covertip">请选择游记封面和背景图！</div>
+		<ul class="coverlist imgsize clearfix">
+			<?php
+			foreach($list as $k=>$v){
+			?>
+				<li class="photo" id="li_img_<?php echo $v[id]?>" idvalue="<?php echo $v[id]?>" imgurl="<?php echo $v[img]?>">
+					<img src="<?php echo $v[simg]?>" />
+					<div class="fengmian">封面</div>
+					<div class="beijing">背景</div>
+				</li>
+			<?php
+			}?>
+		</ul>
+	</div>
+	<div class="wp wbg mt20 pd20">
+		<form method="post" action="<?php echo safe_action();?>">
+			<input type="hidden" name="coverid" value="" />
+			<input type="hidden" name="backgroundid" value="" />
+			<input type="hidden" name="yjid" value="<?php echo $yjid?>" />
+			<input type="submit" class="nextstep" value="下一步" />
+		</form>
+	</div>
+</div>
+</div>
+{/block}
+{block name="script"}
+
+<script>
+var fengmianid=0,beijingid=0;
+$(function(){
+	$(".coverlist li .fengmian").click(function(){
+		if($(this).parent().attr("idvalue")!=fengmianid){
+			if(fengmianid)$("#li_img_"+fengmianid+" .fengmian").removeClass("cur").html("封面");
+			fengmianid=$(this).parent().attr("idvalue");
+			$("#li_img_"+fengmianid+" .fengmian").addClass("cur").html("已选为封面");
+			$("input[name='coverid']").val(fengmianid);
+		}
+	});
+	$(".coverlist li .beijing").click(function(){
+		if($(this).parent().attr("idvalue")!=beijingid){
+			if(beijingid)$("#li_img_"+beijingid+" .beijing").removeClass("cur").html("背景");
+			beijingid=$(this).parent().attr("idvalue");
+			$("#li_img_"+beijingid+" .beijing").addClass("cur").html("已选为背景");
+			$("input[name='backgroundid']").val(beijingid);
+		}
+	});
+	$(".coverlist li").each(function(index, element) {
+		if($(this).attr("imgurl")==("<?php echo $youji[titlepic]?>").replace("/cover","/")){
+			fengmianid=$(this).attr("idvalue");
+			$("#li_img_"+fengmianid+" .fengmian").addClass("cur").html("已选为封面");
+			$("input[name='coverid']").val(fengmianid);
+		}
+		if($(this).attr("imgurl")==("<?php echo $youji[background]?>").replace("/background","/")){
+			beijingid=$(this).attr("idvalue");
+			$("#li_img_"+beijingid+" .beijing").addClass("cur").html("已选为背景");
+			$("input[name='backgroundid']").val(beijingid);
+		}
+	});
+});
+</script>
+{/block}
+{block name="style"}
+{/block}

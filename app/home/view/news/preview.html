@@ -1,0 +1,39 @@
+{extend name="base/base1"}
+{block name="body"}
+<div class="newscont">
+	<div class="newstop" style="background:url(/d/topimg/<?=rand(0,19)?>.jpg) center no-repeat;">
+    	<div class="wp">
+			<div class="mainleft">
+				<div class="newsclass">Ô¤ÀÀ</div>
+				<h1 class="newstitle"><?=$_POST['title']?></h1>
+			</div>
+      </div>
+    </div>
+	<div class="wp clearfix">
+		<div class="mainleft posr">
+			<div class="newscont">
+				<div class="whiteleft posa"></div>
+				<div class="conttop">
+					<div class="newsinfo">
+						<div class="date"><?=date("Y-m-d H:i:s")?></div>
+						<div class="author">×÷Õß£ºÔ¤ÀÀ</div>
+					</div>
+					<div class="keywords clearfix">
+						<ul>
+						</ul>
+					</div>
+				</div>
+				<div class="newstext">
+					<?=$_POST['newstext']?>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{/block}
+{block name="style"}
+<style>.header{border-bottom:solid 1px #ddd;} .newstext{padding-bottom:50px;}</style>
+{/block}
+{block name="files"}
+<link href="/skin/dir2/css/newsshow.css" rel="stylesheet" type="text/css" />
+{/block}

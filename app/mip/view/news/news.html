@@ -1,0 +1,11 @@
+{extend name="base/base"}
+{block name="body"}
+<div class="global">
+	<h1 class="margin01"><?php echo $info['title']?></h1>
+	<p class="newsinfo margin02">
+		<span><?php echo $info['newstime']?></span> 
+		<span class="marginleft01"><?php echo $info['writer']?$info['writer']:$info['username']?></span>
+	</p>
+	<div class="newscont"><?php echo $info['html']?></div>
+</div>
+{/block}

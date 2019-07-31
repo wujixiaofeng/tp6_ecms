@@ -1,0 +1,43 @@
+{extend name="base/base2"}
+{block name="body"}
+	<form class="loginmain" method="post">
+		<div class="input">
+			<label>用户名：</label>
+			<input type="text" name="username" />
+		</div>
+		<div class="input">
+			<label>密码：</label>
+			<input type="password" name="password" />
+		</div>
+		<label class="remember"><input type="checkbox" name="remember" value="1" checked />记住我的登录状态</label>
+<button type="submit">登录</button>
+	</from>
+{/block}
+{block name="files"}
+<link href="__CSS__/login.css?v=2" rel="stylesheet" />
+{/block}
+{block name="script"}<script>
+$(document).ready(function(){
+	$('form').submit(function(){
+		var self=$(this);
+		if(!self.find("input[name='username']").val()){
+			errmsg("请填写用户名！");
+			return false;
+		}
+		if(!self.find("input[name='password']").val()){
+			errmsg("请填写密码！");
+			return false;
+		}
+		/*if(!self.find("input[name='verify']").val()){
+			errmsg("请填写验证码！");
+			return false;
+		}*/
+		$.post(self.attr("action"),self.serialize(),success,"json");
+		return false;
+		function success(data){
+			showmsg(data.msg,function(){if(data.goto)location.href=data.goto;},data.ok);
+		}
+	});
+});
+</script>
+{/block}

@@ -1,0 +1,38 @@
+{extend name="base/base"}
+{block name="body"}
+{include file="ucenter/menu"}
+<div class="global">
+	<h4>上传头像</h4>
+	<div class="showavatar"><img src="<?php echo user_avatar(tp_login());?>" /></div>
+	<div class="upbtn"><div class="btnstr">点击上<br>传头像</div><input type="file" accept="image/*;capture=camera" class="uppicbtn"></div>
+</div>
+{/block}
+{block name="files"}
+<link href="/css/ucenter.css" rel="stylesheet" type="text/css" />
+<link href="/files/h5c.css" rel="stylesheet" type="text/css" />
+<script src="/files/h5c.js"></script>
+{/block}
+{block name="script"}
+<script>
+$(document).ready(function(){
+	html5cutimg({
+		input:".uppicbtn",
+		tips:'头像需要是正方形的，所以需要裁剪',
+		width:300,
+		height:300,
+		callback:function(data){
+			$.post("<?php echo safe_action()?>",{base64:data,type:'image/jpeg',isavatar:1},function(data){
+				if(data['ok']){
+					okmsg('上传完成',function(){location.reload();});
+				}else{
+					errmsg(data['msg']);
+				}
+			},'json');
+		},
+		onerror:function(data){
+			errmsg(data);
+		}
+	});
+});
+</script>
+{/block}

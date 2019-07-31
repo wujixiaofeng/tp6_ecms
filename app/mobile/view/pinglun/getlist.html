@@ -1,0 +1,63 @@
+<?php
+if($repid){
+$repllist=$list;
+$replpage=$page;
+$replrscount=$rscount;
+$replpagesize=$pagesize;
+?>{include file="pinglun/repllist"}<?php
+}else{
+if($ztid>0){
+	$pagetemp="javascript:ztpinglun($ztid,[PAGE],$guandian);";
+}else{
+	$pagetemp="javascript:pinglun($classid,$id,[PAGE]);";
+}
+$plcount=0;
+foreach($list as $k=>$v){
+	if($v[isdel]){
+		$v[saytext]='[此评论已经被删除！]';
+		$v[username]='';
+		$v[userid]='';
+	}
+	$plcount++;
+	$saytime=$v['saytime'];
+	$saytext=plbiaoqing(RepPltextFace(stripSlashes($v['saytext'])));
+	$huifudivid="huifudiv_".$v[plid];
+	$huifuid=$atplid=$v[plid];
+	if($v[userid] and $v[niming]==0){
+		$plusername=$v[username];
+		$pluserid=$v[userid];
+	}else{
+		$plusername="";
+		$pluserid="";
+	}
+	$huifuclick=" onclick=\"huifu('$huifudivid','$huifuid','$atplid','$plusername','$pluserid','$guandian');\"";
+?>
+<li class="clearfix">
+	<div class="avatar"><img src="<?php echo user_avatar($pluserid,$v[plid])?>" /></div>
+	<div class="plinfo">
+		<div class="clearfix">
+			<div class="username"><?php echo $plusername?$plusername:"匿名"?></div>
+		</div>
+		<div class="pltext"><div class="jiao"></div><?php echo $saytext?></div>
+	<div class="plbottom clearfix">
+			<div class="fl pltime"><?php echo $saytime?></div>
+			<a href="javascript:void(0);"<?php echo $huifuclick?> class="fr">回复</a>
+		</div>
+		<div class="huifudiv huifudiv_<?php echo $v[plid]?>">
+			<div id="repldiv_<?php echo $v[plid]?>">
+			<?php
+			$repllist=$v['repllist']['list'];
+			$repid=$v['repllist']['repid'];
+			$replpage=1;
+			$replrscount=$v['repllist']['rscount'];
+			$replpagesize=$v['repllist']['pagesize'];?>
+			{include file="pinglun/repllist"}
+			</div>
+			<div class="formdiv clearfix"></div>
+		</div>
+	</div>
+</li>
+<?php }
+if($plcount==0)echo "<div class=\"nors\">无评论记录!</div>";
+echo getmpagehtml($rscount,$pagesize,0,$pagetemp);
+}?>

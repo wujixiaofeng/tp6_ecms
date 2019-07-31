@@ -1,0 +1,43 @@
+{extend name="youji/base"}
+{block name="body"}
+<div class="wp">
+	<div class="pd100" align="center">
+		<div>给游记起个名字</div>
+		<form method="post" id="form1">
+			<input type="text" name="title" value="<?php echo $youji['title'];?>" />
+			<div>游记描述</div>
+			<textarea name="desc"><?php echo $youji['smalltext'];?></textarea>
+			<input type="submit" class="nextstep" value="下一步" />
+		</form>
+	</div>
+</div>
+{/block}
+{block name="script"}
+<script>
+$(document).ready(function(){
+	$('#form1').submit(function(){
+		var self=$(this);
+		if(!self.find('input[name="title"]').val()){
+			errmsg('请填写游记名称！');
+			return false;
+		}
+		$.post(self.attr("action"), self.serialize(), success, "json");
+		return false;
+
+		function success(res){
+			if(res.ok){
+				location=res.goto;
+				//okmsg(res.msg,function(){location=res.goto;});
+			} else {
+				errmsg(res.msg);
+			}
+		}
+	});
+});
+if(!document.createElement("Canvas").getContext){
+	$(function(){
+		window.wxc.xcConfirm("请使用IE9以上版本，或者使用双核浏览器。", window.wxc.xcConfirm.typeEnum.info,{onOk:function(v){window.location="/";}});
+	});
+}
+</script>
+{/block}

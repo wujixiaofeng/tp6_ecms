@@ -1,0 +1,12 @@
+{extend name="base/base"}
+{block name="body"}
+{include file="public/nav"}
+<div class="global">
+	<div class="news">
+		<ul class="content">
+			{include file="public/newsli2"}
+		</ul>
+		<div class="page2"><?php echo $pagehtml;?></div>
+	</div>
+</div>
+{/block}

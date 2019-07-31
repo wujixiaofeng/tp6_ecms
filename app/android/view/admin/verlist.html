@@ -1,0 +1,36 @@
+{extend name="base/base"}
+{block name="body"}
+	<table width="100%" align="center" class="table1 yudinglist">
+	<tr><th width="50">ID</th><th>版本号</th><th>版本名称</th><th>强制升级设置</th><th>最小版本号</th><th>时间</th><th>更新说明</th><th>操作</th></tr>
+	<?php
+		if($list){
+			foreach($list as $k=>$v){
+				?>
+					<tr align="center">
+						<td>{$v['id']}</td>
+						<td>{$v['vercode']}</td>
+						<td>{$v['vername']}</td>
+						<td>{$v['force']}</td>
+						<td>{$v['mincode']}</td>
+						<td>
+							提交时间：<?php echo think_format_date($v[addtime]);?><br>
+							更新时间：<?php echo think_format_date($v[updatetime]);?>
+						</td>
+						<td><?php echo nl2br(tp_subtext($v['info'],22,'...'));?></td>
+						<td>
+							<a href="<?php echo url('android/admin/update',array('id'=>$v['id']));?>">修改</a>
+							<a href="{$v['filepath']}">下载</a>
+						</td>
+					</tr>
+				<?php
+			}
+			if($pagehtml){
+				?><tr align="left"><td colspan="20"><?php echo $pagehtml;?></td></tr><?php
+			}
+		}else{
+			?><tr align="center"><td colspan="20"><div class="nors">暂无记录！</div></td></tr><?php
+		}
+	?>
+	</table>
+	<script>$('.table1 tr:even').addClass('tr2');</script>
+{/block}
